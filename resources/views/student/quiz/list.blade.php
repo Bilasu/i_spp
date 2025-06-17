@@ -57,6 +57,7 @@
                                     </small>
                                 </div>
 
+
                                 @if (isset($no_questions) && $no_questions)
                                     <div class="text-center py-5">
                                         <h5 class="text-muted">Tiada soalan tersedia untuk kategori ini.</h5>
@@ -76,12 +77,14 @@
                                             @foreach (['a', 'b', 'c', 'd'] as $option)
                                                 <div class="form-check mb-3">
                                                     <input class="form-check-input" type="radio" name="ans"
-                                                        id="ans_{{ $option }}" value="{{ $option }}">
+                                                        id="ans_{{ $option }}" value="{{ $option }}"
+                                                        {{ isset($selectedAnswer) && $selectedAnswer === $option ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="ans_{{ $option }}">
                                                         {{ $question->$option }}
                                                     </label>
                                                 </div>
                                             @endforeach
+
 
                                             <!-- Hidden Fields -->
                                             <input type="hidden" name="dbnans" value="{{ $question->ans }}">

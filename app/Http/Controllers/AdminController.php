@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Notifications\AdminForgotPassword;
 
+
 class AdminController extends Controller
 {
     //
@@ -23,30 +24,43 @@ class AdminController extends Controller
 
     public function authenticate(Request $request)
     {
+
         $request->validate([
             'ic' => 'required|digits:8',
             'password' => 'required',
         ]);
 
-        $admins = User::where('ic', 'like', $request->ic . '%')->get();
+        // Cari user yang IC bermula dengan 8 digit
+        $admin = User::where('ic', 'like', $request->ic . '%')
+            ->where('role', 'admin')
+            ->where('status', 'active')
+            ->first();
 
-        foreach ($admins as $admin) {
+        if ($admin) {
             $adminICFirst8 = substr($admin->ic, 0, 8);
-            $adminICLast4 = substr($admin->ic, -4);
 
             if (
                 $adminICFirst8 === $request->ic &&
-                Hash::check($request->password, $admin->password) &&
-                $admin->status === 'active' &&
-                $admin->role === 'admin'
+                Hash::check($request->password, $admin->password)
             ) {
-                Auth::guard('admin')->login($admin); // ✅ Only after verification
+                Auth::guard('admin')->login($admin);
                 return redirect()->route('admin.dashboard')->with('success', 'Login successfully.');
             }
         }
 
+        // dd([
+        //     'input_ic' => $request->ic,
+        //     'admin_found' => $admin,
+        //     'admin_ic_first8' => $admin ? substr($admin->ic, 0, 8) : null,
+        //     'compare_ic' => $admin ? substr($admin->ic, 0, 8) === $request->ic : null,
+        //     'password_input' => $request->password,
+        //     'password_match' => $admin ? Hash::check($request->password, $admin->password) : null,
+        // ]);
+
+
         return redirect()->route('admin.login')->with('error', 'Invalid IC or password.');
     }
+
 
 
     public function logout()
@@ -84,49 +98,56 @@ class AdminController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
-        // 1. Validate IC input
-        $request->validate([
-            'ic' => 'required|digits:12|exists:users,ic', // Ensure IC exists in the users table
-        ]);
+        $user = User::where('ic', $request->ic)->first();
+
+        if (!$user) {
+            return back()->with('error', 'Invalid or non-registered IC.');
+        }
+
+        $token = Str::random(64);
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['ic' => $user->ic],
+            [
+                'token' => $token, // Simpan token tanpa di-hash
+                'created_at' => Carbon::now()
+            ]
+        );
+
+        $checkToken = DB::table('password_reset_tokens')->where('ic', $user->ic)->first();
 
         try {
-            // 2. Retrieve user by IC
-            $user = User::where('ic', $request->ic)->first();
-
-            if (!$user) {
-                return back()->with('error', 'Invalid or non-registered IC.');
-            }
-
-            // // 3. Generate a new plain password (optional: use random)
-            // $plainPassword = Str::random(10);
-
-            // // 4. Save the new hashed password to user
-            // $user->password = bcrypt($plainPassword);
-            // $user->save();
-
-            // 5. Generate token for password reset link
-            $token = Str::random(64);
-
-            // 6. Save or update token in password_reset_tokens table
-            DB::table('password_reset_tokens')->updateOrInsert(
-                ['ic' => $user->ic],  // Use IC instead of email
-                [
-                    'token' => bcrypt($token),
-                    'created_at' => Carbon::now()
-                ]
-            );
-
-            // 7. Send custom notification with temporary password + token
             $user->notify(new AdminForgotPassword($user, $token));
 
-            // 8. Return success message
+            // ✅ DEBUG BLOCK - Uncomment if needed
+            /*
+        dd([
+            'input_ic' => $request->ic,
+            'user_found' => $user,
+            'generated_token' => $token,
+            'saved_token_row' => $checkToken,
+            'notification_status' => 'Sent Successfully!',
+        ]);
+        */
+
             return back()->with('success', 'We have emailed your account credentials!');
         } catch (\Exception $e) {
-            // 9. Log and return error
-            // \Log::error('Reset Email Error: ' . $e->getMessage());
+
+            // ❌ DEBUG BLOCK - Uncomment if needed
+            /*
+        dd([
+            'input_ic' => $request->ic,
+            'user_found' => $user,
+            'generated_token' => $token,
+            'saved_token_row' => $checkToken,
+            'notification_error' => $e->getMessage(),
+        ]);
+        */
+
             return back()->with('error', 'Failed to send password reset email. Please try again.');
         }
     }
+
 
     public function showResetForm($token, Request $request)
     {
@@ -145,6 +166,7 @@ class AdminController extends Controller
 
     public function passwordchange(Request $request)
     {
+        // Validate input
         $request->validate([
             'ic' => 'required|digits:12|exists:users,ic',
             'password' => 'required|confirmed|min:8',
@@ -153,32 +175,30 @@ class AdminController extends Controller
             'password.confirmed' => 'The password is not same.',
         ]);
 
-        // Semak token wujud dalam table dan IC match
+        // Check if token exists and match
         $record = DB::table('password_reset_tokens')
             ->where('ic', $request->ic)
             ->first();
 
-        if (!$record || !Hash::check($request->token, $record->token)) {
+        // Gantikan Hash::check dengan perbandingan langsung
+        if (!$record || $request->token !== $record->token) {
             return back()->withErrors(['token' => 'Invalid or expired token.']);
         }
 
-        // Tukar password user
+        // Get the user
         $user = User::where('ic', $request->ic)->first();
-        $user->password = $request->password;
+
+        // Safely hash new password and save
+        $user->password = Hash::make($request->password);
         $user->save();
 
-        // Debug untuk sahkan perubahan
-        // dd([
-        //     'IC' => $user->ic,
-        //     'Saved Hash' => $user->password,
-        //     'Valid Hash?' => Hash::check($request->password, $user->password),
-        // ]);
-
-        // Buang token selepas reset
+        // Delete the token after reset
         DB::table('password_reset_tokens')->where('ic', $request->ic)->delete();
 
+        // Redirect to login
         return redirect()->route('admin.login')->with('success', 'Password has been reset!');
     }
+
 
 
     // public function dashboard()

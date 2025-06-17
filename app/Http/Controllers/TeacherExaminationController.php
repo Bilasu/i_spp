@@ -68,6 +68,12 @@ class TeacherExaminationController extends Controller
             ->get()
             ->keyBy('student_ic');
 
+        // dd([
+        //     'hari_ini' => $today,
+        //     'start_date' => $exam->start_date,
+        //     'end_date' => $exam->end_date,
+        //     'boleh_isi' => $canFill
+        // ]);
         return view('teacher.exams.fillmarks', compact('exam', 'classroom', 'students', 'marks', 'canFill'));
     }
     // Simpan markah pelajar (update atau insert)

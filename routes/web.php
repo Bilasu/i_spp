@@ -317,6 +317,8 @@ Route::group(['prefix' => 'student'], function () {
         Route::post('quiz/submitans', [QuestionController::class, 'submitans'])->name('student.quiz.submit');
         //Resut all quiz by ca
         Route::get('quiz/results/all', [QuestionController::class, 'allResults'])->name('student.quiz.allResults');
+        //back quiz
+        Route::get('/student/quiz/back/{index}', [QuestionController::class, 'back'])->name('student.quiz.back');
 
         //Subjective Question
 

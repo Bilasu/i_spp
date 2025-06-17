@@ -272,7 +272,8 @@ class TeacherController extends Controller
             DB::table('password_reset_tokens')->updateOrInsert(
                 ['ic' => $user->ic],  // Use IC instead of email
                 [
-                    'token' => bcrypt($token),
+
+                    'token' => $token, // Simpan token tanpa di-hash
                     'created_at' => Carbon::now()
                 ]
             );
@@ -306,6 +307,7 @@ class TeacherController extends Controller
 
     public function passwordchange(Request $request)
     {
+        // Validate input
         $request->validate([
             'ic' => 'required|digits:12|exists:users,ic',
             'password' => 'required|confirmed|min:8',
@@ -314,30 +316,35 @@ class TeacherController extends Controller
             'password.confirmed' => 'The password is not same.',
         ]);
 
-        // Semak token wujud dalam table dan IC match
+        // Check if token exists and match
         $record = DB::table('password_reset_tokens')
             ->where('ic', $request->ic)
             ->first();
 
-        if (!$record || !Hash::check($request->token, $record->token)) {
+
+        // dd([
+        //     'input_ic' => $request->ic,
+        //     'input_token' => $request->token,
+        //     'db_record' => $record,
+        //     'record_token' => $record ? $record->token : null,
+        //     'token_match' => $record ? $request->token === $record->token : null,
+        // ]);
+        // Gantikan Hash::check dengan perbandingan langsung
+        if (!$record || $request->token !== $record->token) {
             return back()->withErrors(['token' => 'Invalid or expired token.']);
         }
 
-        // Tukar password user
+        // Get the user
         $user = User::where('ic', $request->ic)->first();
-        $user->password = $request->password;
+
+        // Safely hash new password and save
+        $user->password = Hash::make($request->password);
         $user->save();
 
-        // Debug untuk sahkan perubahan
-        // dd([
-        //     'IC' => $user->ic,
-        //     'Saved Hash' => $user->password,
-        //     'Valid Hash?' => Hash::check($request->password, $user->password),
-        // ]);
-
-        // Buang token selepas reset
+        // Delete the token after reset
         DB::table('password_reset_tokens')->where('ic', $request->ic)->delete();
 
+        // Redirect to login
         return redirect()->route('teacher.login')->with('success', 'Password has been reset!');
     }
 }

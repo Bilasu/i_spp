@@ -3,6 +3,8 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="lugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+@endsection
+
 @section('content')
     <div class="content-wrapper">
 
@@ -26,9 +28,6 @@
                     </div>
                 </div>
             </div>
-
-
-
 
             <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -59,7 +58,7 @@
 
                         {{-- Quiz Result Card --}}
                         <div class="card shadow-lg mt-5">
-                            <div class="card-body text-center">
+                            <div class="card-body text-center" style="padding-bottom: 100px;">
 
                                 <h2 class="mb-4" style="color: #333;">📊 Quiz Result</h2>
 
@@ -135,12 +134,10 @@
                 </div>
             </div>
 
-
-
         </section>
     </div>
-
 @endsection
+
 @section('customJs')
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -175,8 +172,6 @@
                 }
             });
 
-
-
             table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
             // Add custom styling to the search box
@@ -187,10 +182,8 @@
                     display: 'inline-block'
                 });
 
-
             // Move buttons to custom container
             table.buttons().container().appendTo('#datatable-buttons');
         });
     </script>
-
 @endsection

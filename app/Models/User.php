@@ -45,13 +45,13 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            // 'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    // protected function casts(): array
+    // {
+    //     return [
+    //         // 'email_verified_at' => 'datetime',
+    //         'password' => 'hashed',
+    //     ];
+    // }
 
 
 
@@ -71,11 +71,11 @@ class User extends Authenticatable
         return $this->hasMany(ExamMark::class, 'student_ic', 'ic');
     }
 
-    // Hash the password before saving to the database
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
+    // // Hash the password before saving to the database
+    // public function setPasswordAttribute($value)
+    // {
+    //     $this->attributes['password'] = Hash::make($value);
+    // }
 
     public function getEmailForPasswordReset()
     {

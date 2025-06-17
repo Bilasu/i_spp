@@ -46,71 +46,99 @@
                             <!-- Card to display the assignment details and submission form -->
                             <div class="card p-4 shadow-sm">
 
-                                <p><strong>Due Date:</strong>
-                                    @if ($assignment->due_date)
-                                        {{ $assignment->due_date->format('d M Y H:i') }}
-                                    @else
-                                        <em>Not set yet</em>
-                                    @endif
-                                </p>
+                                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
 
-                                {{-- Display Assignment File if available --}}
-                                @if ($assignment->file_path)
-                                    <p><strong>Assignment File:</strong>
-                                        <a href="{{ route('student.assignment.download', $assignment->file_path) }}"
-                                            target="_blank" download>
-                                            Download Assignment File
-                                        </a>
-                                    </p>
-                                @endif
+                                    {{-- Kotak Due Date --}}
+                                    <div
+                                        style=" font-size: 30px; flex: 1; min-width: 250px; background-color: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                                        <p><strong>Due Date:</strong><br>
+                                            @if ($assignment->due_date)
+                                                <span
+                                                    style="color: #1e88e5;">{{ $assignment->due_date->format('d M Y H:i') }}</span>
+                                            @else
+                                                <em>Not set yet</em>
+                                            @endif
+                                        </p>
+                                    </div>
+
+                                    {{-- Kotak Assignment File --}}
+                                    @if ($assignment->file_path)
+                                        <div
+                                            style="font-size: 20px; flex: 1; min-width: 250px; background-color: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                                            <p><strong>Assignment File:</strong><br>
+                                            <div
+                                                style="background-color: rgba(200, 200, 200, 0.3); padding: 15px; border-radius: 10px; display: inline-block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.3s;">
+                                                <a href="{{ route('student.assignment.download', $assignment->file_path) }}"
+                                                    target="_blank" download
+                                                    style="text-decoration: none; color: #1e88e5; font-weight: bold; display: flex; align-items: center; gap: 10px;">
+                                                    <i class="fas fa-download"></i> Download Assignment File
+                                                </a>
+                                            </div>
+
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                </div>
+
 
                                 <hr>
 
-                                {{-- Submission Form --}}
-                                <h3>Submission Form</h3>
+                                <div
+                                    style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
 
-                                <form
-                                    action="{{ $studentSubmission ? route('student.submission.update', $assignment->id) : route('student.submission.submit', $assignment->id) }}"
-                                    method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    @if ($studentSubmission)
-                                        {{-- @method('PUT') --}}
-                                    @endif
+                                    <h3 style="font-family: 'Montserrat', sans-serif; font-weight: 600; color: #333;">
+                                        Submission Form</h3>
 
-                                    <!-- Comment Section -->
-                                    <div class="mb-3">
-                                        <label for="comment" class="form-label">Comment (optional):</label>
-                                        <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment', $studentSubmission->comment ?? '') }}</textarea>
-                                        @error('comment')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                    <form
+                                        action="{{ $studentSubmission ? route('student.submission.update', $assignment->id) : route('student.submission.submit', $assignment->id) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        @if ($studentSubmission)
+                                            {{-- @method('PUT') --}}
+                                        @endif
 
-                                    <!-- File Upload Section -->
-                                    <div class="mb-3">
-                                        <label for="file_path" class="form-label">Upload File :</label>
-                                        <input type="file" name="file" id="file_path" class="form-control"
-                                            {{ $studentSubmission ? '' : 'required' }}>
-                                        @error('file')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                        <!-- Comment Section -->
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label">Comment (optional):</label>
+                                            <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment', $studentSubmission->comment ?? '') }}</textarea>
+                                            @error('comment')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                    <!-- Display Submitted File -->
-                                    @if ($studentSubmission && $studentSubmission->file_path)
-                                        <p><strong>Your Submitted File:</strong>
-                                            <a href="{{ route('student.submission.download', $studentSubmission->file_path) }}"
-                                                target="_blank" download>
-                                                Download Submitted File
-                                            </a>
-                                        </p>
-                                    @endif
+                                        <!-- File Upload Section -->
+                                        <div class="mb-3">
+                                            <label for="file_path" class="form-label">Upload File :</label>
+                                            <input type="file" name="file" id="file_path" class="form-control"
+                                                {{ $studentSubmission ? '' : 'required' }}>
+                                            @error('file')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
-                                    <!-- Submit/Update Button -->
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ $studentSubmission ? 'Update Submission' : 'Submit Assignment' }}
-                                    </button>
-                                </form>
+                                        <!-- Display Submitted File -->
+                                        @if ($studentSubmission && $studentSubmission->file_path)
+                                            <p><strong>Your Submitted File:</strong>
+                                            <div
+                                                style="background-color: rgba(200, 200, 200, 0.3); padding: 15px; border-radius: 10px; display: inline-block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.3s;">
+                                                <a href="{{ route('student.submission.download', $studentSubmission->file_path) }}"
+                                                    target="_blank" download
+                                                    style="text-decoration: none; color: #1e88e5; font-weight: bold; display: flex; align-items: center; gap: 10px;">
+                                                    <i class="fas fa-download"></i> Download Submitted File
+                                                </a>
+                                            </div>
+                                            </p>
+                                        @endif
+
+                                        <!-- Submit/Update Button -->
+                                        <button type="submit" class="btn btn-primary">
+                                            {{ $studentSubmission ? 'Update Submission' : 'Submit Assignment' }}
+                                        </button>
+                                    </form>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -146,7 +174,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search notetypes..."
+                    searchPlaceholder: "🔍 Search assignment..."
                 }
             });
 

@@ -1,90 +1,81 @@
-@extends('student.layout')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-    <div class="content-wrapper">
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Change Password</h1>
-                    </div>
-                </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student | Change Password</title>
+    <base href="{{ asset('admincss') }}/" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
+
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min2167.css?v=3.2.0">
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box" style="width: 500px;">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a class="h1"><b>Student | Change Password</b></a>
             </div>
-        </section>
 
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Change New Password</h3>
-                            </div>
+            <div class="card-body">
+                {{-- Flash Messages --}}
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
-                            <form action="{{ route('student.updatePassword') }}" method="POST">
-                                @csrf
-                                <div class="card-body">
-                                    @if (session('success'))
-                                        <div class="alert alert-success">
-                                            {{ session('success') }}
-                                        </div>
-                                    @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
-                                    @if (session('error'))
-                                        <div class="alert alert-danger">
-                                            {{ session('error') }}
-                                        </div>
-                                    @endif
-
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <ul class="mb-0">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-
-                                    <div class="form-group">
-                                        <label for="Old Password">Old Password</label>
-                                        <input type="password" name="old_password" class="form-control" required
-                                            placeholder="Enter Old Password">
-                                    </div>
-
-
-
-
-                                    <div class="form-group">
-                                        <label for="New Password">New Password</label>
-                                        <input type="password" name="password" class="form-control" required
-                                            placeholder="Enter New Password">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="Confirm New Password">Confirm New Password</label>
-                                        <input type="password" name="password_confirmation" class="form-control" required
-                                            placeholder="Confirm New Password">
-                                    </div>
-                                </div>
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Update Password</button>
-                                </div>
-                            </form>
-                        </div>
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
+                @endif
+
+                {{-- Form --}}
+                <form action="{{ route('student.updatePassword') }}" method="POST">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="old_password">Old Password</label>
+                        <input type="password" name="old_password" class="form-control" placeholder="Enter old password"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter new password"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm New Password</label>
+                        <input type="password" name="password_confirmation" class="form-control"
+                            placeholder="Confirm new password" required>
+                    </div>
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+                    </div>
+                </form>
+
             </div>
-        </section>
+        </div>
     </div>
-@endsection
 
-@section('customJs')
-    <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-    <script>
-        $(function() {
-            bsCustomFileInput.init();
-        });
-    </script>
-@endsection
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="dist/js/adminlte.min2167.js?v=3.2.0"></script>
+</body>
+
+</html>

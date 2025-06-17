@@ -44,7 +44,7 @@ class AdminForgotPassword extends Notification
             ->line('Hello, you are successfully registered as a user for the iSPP System.')
             ->line('Please remember you need to change your password after the first login.')
             ->line('Please use the credentials below to log in:')
-            ->line('📧 IC: ' . $this->user->name)
+            ->line('📧 Nama: ' . $this->user->name)
             // ->line('🔐 Password: **' . $this->plainPassword . '**')  // This line displays the temporary password
             ->action('Click here to reset your password', route('password.reset', [
                 'token' => $this->token,

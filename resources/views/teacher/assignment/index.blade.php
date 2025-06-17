@@ -4,6 +4,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        <style>.table-blue-header {
+            background-color: #1e88e5;
+            color: white;
+        }
+    </style>
+    </style>
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -53,15 +60,16 @@
                     <div class="table-responsive mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
+                                <table style="background-color: #1e88e5; color: white;" class="table table-bordered">
+                                    <thead class="table-blue-header">
                                         <tr>
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Due Date</th>
                                             <th>File</th>
                                             <th>Submitted Students</th>
-                                            <th>Actions</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,12 +107,26 @@
                                                 <td>
                                                     <button class="btn btn-warning btn-sm" data-toggle="modal"
                                                         data-target="#editAssignmentModal{{ $assignment->id }}">Edit</button>
+
+                                                </td>
+                                                <td>
                                                     <button class="btn btn-danger btn-sm" data-toggle="modal"
                                                         data-target="#deleteAssignmentModal{{ $assignment->id }}">Delete</button>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot style="background-color: #1e88e5; color: white;" class="table table-bordered">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Due Date</th>
+                                            <th>File</th>
+                                            <th>Submitted Students</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -240,6 +262,7 @@
             </div>
         </div>
     @endforeach
+
 @endsection
 @section('customJs')
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>

@@ -19,6 +19,9 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ route('student.dashboard') }}">Home</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('student.quizcategory.read') }}">Back</a>
+                            </li>
                             <li class="breadcrumb-item active">Semua Keputusan Kuiz</li>
                         </ol>
                     </div>
@@ -65,7 +68,9 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted text-center">Tiada keputusan kuiz ditemui.</p>
+                    <div class="alert alert-info mt-3">
+                        <strong><i class="fas fa-pen-alt"></i> No results found</strong>
+                    </div>
                 @endforelse
             </div>
         </section>

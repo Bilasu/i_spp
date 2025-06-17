@@ -101,8 +101,8 @@
                             </form>
                         @else
                             <div class="alert alert-info mt-3">
-                                <strong><i class="fas fa-clock"></i> Masa untuk isi markah telah tamat atau belum
-                                    bermula.</strong>
+                                <strong><i class="fas fa-clock"></i> You can no longer submit marks at this time — the
+                                    submission window is either not yet open or has closed.</strong>
                             </div>
                         @endif
                     </div>

@@ -73,10 +73,10 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
 
-                        <li class="nav-item menu-open">
+                        <li class="nav-item menu-open" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Dashboard
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
@@ -103,16 +103,16 @@
                             </ul>
                         </li> --}}
                         {{-- Student Management --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     User Management
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href={{ route('teacher.read') }} class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard-teacher"></i>
@@ -127,11 +127,11 @@
                                 </li> --}}
 
                             </ul>
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href={{ route('student.read') }} class="nav-link">
                                         <i class="nav-icon fas fa-user-graduate"></i>
-                                        <p>Student Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Student Management</p>
                                     </a>
                                 </li>
                                 {{-- <li class="nav-item">
@@ -145,19 +145,19 @@
                         </li>
 
 
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Notes Management
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href={{ route('notetypes.read') }} class="nav-link">
                                         <i class="nav-icon fas fa-tags"></i>
-                                        <p>Note Types Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Note Types Management</p>
                                     </a>
                                 </li>
                                 {{-- <li class="nav-item">
@@ -168,11 +168,11 @@
                                 </li> --}}
 
                             </ul>
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href={{ route('admin.notes.read') }} class="nav-link">
                                         <i class="nav-icon fas fa-file-alt"></i>
-                                        <p>Note Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Note Management</p>
                                     </a>
                                 </li>
                                 {{-- <li class="nav-item">
@@ -191,26 +191,26 @@
 
 
                         {{-- Pembelajaran & Pengajaran (PdP) --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-school"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Teaching and Learning (T&L)
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.classrooms.read') }}" class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p>Classes Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Classes Management</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                                     <a href="{{ route('admin.exams.read') }}" class="nav-link">
                                         <i class="nav-icon fas fa-clipboard-check"></i>
-                                        <p>Examination Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Examination Management</p>
                                     </a>
                                 </li>
 
@@ -219,21 +219,21 @@
                         </li>
 
                         {{-- Pembelajaran & Pengajaran (PdP) --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Quiz Management
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.quizcategory.read') }}" class="nav-link">
                                         <i class="nav-icon fas fa-pencil-alt"></i>
 
-                                        <p>Quiz Category Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Quiz Category Management</p>
                                     </a>
                                 </li>
 
@@ -242,10 +242,10 @@
                         </li>
 
                         {{-- User Profile --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="{{ route('admin.logout') }}" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Logout
 
                                 </p>

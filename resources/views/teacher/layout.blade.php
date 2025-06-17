@@ -74,8 +74,8 @@
 
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
-                    <div class="info">
-                        <span style="color: white;">Menu</span>
+                    <div class="info" style="padding-top: 25px; padding-bottom: 15px;">
+                        <span style="color: white;" style="font-size: 30px; margin-left: 20px;">Menu</span>
                     </div>
                 </div>
 
@@ -86,9 +86,10 @@
                         data-accordion="false">
 
                         <li class="nav-item menu-open">
-                            <a href="{{ route('teacher.dashboard') }}" class="nav-link active">
+                            <a href="{{ route('teacher.dashboard') }}" class="nav-link active"
+                                style="padding-top: 25px; padding-bottom: 15px;">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
+                                <p style="font-size: 20px; margin-left: 20px;">
                                     Dashboard
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
@@ -96,16 +97,15 @@
                         </li>
                         {{-- Notes Management --}}
                         <li class="nav-item">
-                            <a href="{{ route('teacher.notes.read') }}" class="nav-link">
-                                <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
+                            <a href="{{ route('teacher.notes.read') }}" class="nav-link"
+                                style="padding-top: 25px; padding-bottom: 15px;">
+                                <i class="nav-icon fas fa-clipboard-list" style="font-size: 20px;"></i>
+                                <p style="font-size: 25px; margin-left: 20px;">
                                     Notes Management
-
                                 </p>
                             </a>
-
-
                         </li>
+
 
 
 
@@ -120,25 +120,25 @@
 
                         {{-- Pembelajaran & Pengajaran (PdP) --}}
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" style="padding-top: 25px; padding-bottom: 15px;">
                                 <i class="nav-icon fas fa-school"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Teaching and Learning (T&L)
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
-                            <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview" style="padding-top: 25px; padding-bottom: 15px;">
                                 <li class="nav-item">
                                     <a href="{{ route('teacher.classrooms.index') }}" class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p>My Classes</p>
+                                        <p style="font-size: 25px; margin-left: 20px;">My Classes</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                                     <a href="{{ route('teacher.exams.index') }}" class="nav-link">
                                         <i class="nav-icon fas fa-clipboard-check"></i>
-                                        <p>Examination Records</p>
+                                        <p style="font-size: 25px; margin-left: 20px;">Examination Records</p>
                                     </a>
                                 </li>
 
@@ -151,20 +151,20 @@
                         {{-- Examination Records --}}
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" style="padding-top: 25px; padding-bottom: 15px;">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 20px;">
                                     Quiz Management
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                                     <a href="{{ route('teacher.quizcategory.read') }}" class="nav-link">
                                         <i class="nav-icon fas fa-pencil-alt"></i>
 
-                                        <p>Quiz Category Management</p>
+                                        <p style="font-size: 25px; margin-left: 20px;">Quiz Category Management</p>
                                     </a>
                                 </li>
 
@@ -173,10 +173,10 @@
                         </li>
 
                         {{-- User Profile --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="{{ route('teacher.logout') }}" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 20px;">
                                     Logout
 
                                 </p>

@@ -231,15 +231,15 @@ class SubjectiveQuestionController extends Controller
         }
     }
 
-    public function adminReview($categoryId)
-    {
-        $category = QuizCategory::with('questions.answers.user')->findOrFail($categoryId);
+    // public function adminReview($categoryId)
+    // {
+    //     $category = QuizCategory::with('questions.answers.user')->findOrFail($categoryId);
 
-        // Redirect kalau admin ialah pencipta
-        if ($category->user_ic !== Auth::guard('admin')->user()->ic) {
-            return redirect()->route('admin.quiz.subshow', $categoryId);
-        }
+    //     // Redirect kalau admin ialah pencipta
+    //     if ($category->user_ic !== Auth::guard('admin')->user()->ic) {
+    //         return redirect()->route('admin.quiz.subshow', $categoryId);
+    //     }
 
-        return view('admin.answer.review', compact('category'));
-    }
+    //     return view('admin.answer.review', compact('category'));
+    // }
 }

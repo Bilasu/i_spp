@@ -158,7 +158,7 @@ class QuestionController extends Controller
     {
         // Store category ID in session
         Session::put('quiz_category_id', $quiz_category_id);
-        Session::put('nextq', 0); // Reset to the first question
+        Session::put('nextq', 0); // Initialize to the first question
         Session::put('correctans', 0); // Initialize correct answer count
         Session::put('wrongans', 0); // Initialize wrong answer count
 
@@ -167,13 +167,13 @@ class QuestionController extends Controller
         $questions = $category->questions->values();
 
         if ($questions->isEmpty()) {
-            // Pass a variable to the view indicating that no questions are available
+            // No questions found, display appropriate message
             return view('student.quiz.list', ['no_questions' => true]);
         }
 
-        // Proceed to show the first question if available
-        $currentIndex = 0;
-        $question = $questions[$currentIndex];
+        // Get the current question index from session
+        $currentIndex = Session::get('nextq', 0); // Retrieve next question index from session
+        $question = $questions[$currentIndex]; // Get the question based on current index
 
         return view('student.quiz.list', [
             'quiz_category' => $category,
@@ -183,39 +183,39 @@ class QuestionController extends Controller
         ]);
     }
 
+
     public function submitans(Request $request)
     {
-        // dd(Auth::guard('student')->user());
-
-        // Retrieve session data
-        $nextq = Session::get('nextq', 0); // Retrieve next question index from session
+        $nextq = Session::get('nextq', 0);
         $quiz_category_id = Session::get('quiz_category_id');
-        $questions = QuizCategory::findOrFail($quiz_category_id)->questions;;
-        // Validate the answer submission
+        $questions = QuizCategory::findOrFail($quiz_category_id)->questions->values();
+
         $request->validate([
             'ans' => 'required',
             'dbnans' => 'required',
+            'question_id' => 'required|integer',
         ]);
 
-        // Update score based on the answer correctness
+        // Simpan jawapan pelajar dalam session
+        $answers = Session::get('answers', []);
+        $answers[$request->question_id] = $request->ans;
+        Session::put('answers', $answers);
+
+        // Cek betul/salah
         if ($request->ans === $request->dbnans) {
-            $correctans = Session::get('correctans', 0) + 1; // Increment correct answers
-            Session::put('correctans', $correctans);
+            Session::put('correctans', Session::get('correctans', 0) + 1);
         } else {
-            $wrongans = Session::get('wrongans', 0) + 1; // Increment wrong answers
-            Session::put('wrongans', $wrongans);
+            Session::put('wrongans', Session::get('wrongans', 0) + 1);
         }
 
-        // Increment question counter
+        // Soalan seterusnya
         $nextq++;
         Session::put('nextq', $nextq);
 
-        // Check if all questions are answered, if so, save results and return to results page
         if ($nextq >= $questions->count()) {
+            // Tamat kuiz
             $correct = Session::get('correctans');
             $wrong = Session::get('wrongans');
-
-            // Save score to database
             $latestResult = QuizResult::create([
                 'user_ic' => Auth::guard('student')->user()->ic,
                 'quiz_category_id' => $quiz_category_id,
@@ -224,31 +224,27 @@ class QuestionController extends Controller
                 'total' => $questions->count(),
                 'taken_at' => now(),
             ]);
-
-            // Retrieve previous results
             $previousResults = QuizResult::where('user_ic', Auth::guard('student')->user()->ic)
                 ->where('quiz_category_id', $quiz_category_id)
                 ->where('id', '!=', $latestResult->id)
                 ->orderByDesc('taken_at')
                 ->get();
 
-
-            // Clear session for next quiz
-            Session::forget(['nextq', 'correctans', 'wrongans', 'quiz_category_id']);
-
-            // Return to the results page with latest and previous results
-            return view('student.quiz.end', [
-                'latestResult' => $latestResult,
-                'previousResults' => $previousResults,
-            ]);
+            Session::forget(['nextq', 'correctans', 'wrongans', 'quiz_category_id', 'answers']);
+            return view('student.quiz.end', compact('latestResult', 'previousResults'));
         }
 
-        // Get the next question if not finished
         $question = $questions[$nextq];
-
-        // Return the next question view
-        return view('student.quiz.list', compact('question'));
+        return view('student.quiz.list', [
+            'question' => $question,
+            'quiz_category' => QuizCategory::findOrFail($quiz_category_id),
+            'currentIndex' => $nextq,
+            'totalQuestions' => $questions->count(),
+            'selectedAnswer' => Session::get('answers')[$question->id] ?? null,
+        ]);
     }
+
+
 
     public function showResults($quiz_id)
     {
@@ -287,5 +283,30 @@ class QuestionController extends Controller
             ->groupBy('category_name');
 
         return view('student.quiz.all_results', compact('resultsByCategory'));
+    }
+
+
+
+    public function back($index)
+    {
+        $quiz_category_id = Session::get('quiz_category_id');
+        $questions = QuizCategory::findOrFail($quiz_category_id)->questions->values();
+
+        $index = max(0, $index);
+        $question = $questions[$index];
+
+        Session::put('nextq', $index);
+
+        // Ambil semula jawapan jika ada
+        $answers = Session::get('answers', []);
+        $selectedAnswer = $answers[$question->id] ?? null;
+
+        return view('student.quiz.list', [
+            'quiz_category' => QuizCategory::findOrFail($quiz_category_id),
+            'question' => $question,
+            'currentIndex' => $index,
+            'totalQuestions' => $questions->count(),
+            'selectedAnswer' => $selectedAnswer,
+        ]);
     }
 }

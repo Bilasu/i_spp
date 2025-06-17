@@ -72,7 +72,7 @@
                                                     @endphp
 
                                                     {{-- Debugging output to check the values --}}
-                                                    {{-- <p>Teacher IC: {{ $teacher_ic }}</p>
+                                                    {{-- <p>teacher IC: {{ $teacher_ic }}</p>
                                                     <p>Category IC: {{ $category_ic }}</p> --}}
 
                                                     {{-- @if (Auth::guard('teacher')->check() && $category_ic === $teacher_ic) --}}
@@ -117,11 +117,16 @@
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="editQuestionModalLabel">Edit
                                                                     Soalan</h5>
+                                                                <input type="hidden" name="quiz_category_id"
+                                                                    value="{{ $question->quiz_category_id }}">
+
                                                                 <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
+
+
                                                             <div class="modal-body">
                                                                 <div class="form-group">
                                                                     <label for="question">Soalan</label>
@@ -129,7 +134,7 @@
                                                                         class="form-control"
                                                                         value="{{ $question->question }}">
                                                                 </div>
-                                                                <div class="form-group">
+                                                                {{-- <div class="form-group">
                                                                     <label for="quiz_category_id">Kategori</label>
                                                                     <select name="quiz_category_id" id="quiz_category_id"
                                                                         class="form-control">
@@ -140,7 +145,7 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
-                                                                </div>
+                                                                </div> --}}
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
@@ -167,9 +172,6 @@
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="deleteQuestionModalLabel">Padam
                                                                     Soalan</h5>
-
-                                                                <input type="hidden" name="quiz_category_id"
-                                                                    value="{{ $question->quiz_category_id }}">
                                                                 <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
@@ -203,9 +205,10 @@
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="{{ route('teacher.subjective.store', ['quiz_category_id' => $category->id]) }}"
-                            method="POST">
+                        <form action="{{ route('teacher.subjective.store') }}" method="POST">
                             @csrf
+
+
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addQuestionModalLabel">Tambah Soalan Baru</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -215,22 +218,24 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="question">Soalan</label>
+
                                     {{-- <input type="hidden" name="quiz_category_id"
                                         value="{{ $question->quiz_category_id }}"> --}}
+
                                     <input type="hidden" name="quiz_category_id" value="{{ $quiz_category_id }}">
+
 
                                     <input type="text" name="question" id="question" class="form-control"
                                         placeholder="Masukkan soalan di sini" required>
                                 </div>
-
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="quiz_category_id">Kategori</label>
                                     <select name="quiz_category_id" id="quiz_category_id" class="form-control" required>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -258,7 +263,7 @@
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-    <script src="dist/js/adminlte.min2167.js?v=3.2.0"></script>
+    <script src="dist/js/teacherlte.min2167.js?v=3.2.0"></script>
 
     <script>
         $(function() {

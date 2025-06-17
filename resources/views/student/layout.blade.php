@@ -75,9 +75,10 @@
                         data-accordion="false">
 
                         <li class="nav-item menu-open">
-                            <a href="{{ route('student.dashboard') }}" class="nav-link active">
+                            <a href="{{ route('student.dashboard') }}" class="nav-link active"
+                                style="padding-top: 25px; padding-bottom: 15px;">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Dashboard
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
@@ -87,19 +88,19 @@
 
                         {{-- Pembelajaran & Pengajaran (PdP) --}}
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" style="padding-top: 25px; padding-bottom: 15px;">
                                 <i class="nav-icon fas fa-school"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Teaching and Learning (T&L)
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
 
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                                     <a href="{{ route('student.classrooms.index') }}" class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p> My Class</p>
+                                        <p style="font-size: 25px; margin-left: 25px;"> My Class</p>
                                     </a>
                                 </li>
                                 {{-- <li class="nav-item">
@@ -113,10 +114,10 @@
 
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="{{ route('student.quizcategory.read') }}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Quiz
 
                                 </p>
@@ -124,10 +125,10 @@
                         </li>
 
                         {{-- User Profile --}}
-                        <li class="nav-item">
+                        <li class="nav-item" style="padding-top: 25px; padding-bottom: 15px;">
                             <a href="{{ route('student.logout') }}" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
-                                <p>
+                                <p style="font-size: 25px; margin-left: 30px;">
                                     Logout
 
                                 </p>

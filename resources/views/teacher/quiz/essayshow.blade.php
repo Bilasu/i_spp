@@ -17,7 +17,12 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('teacher.dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('teacher.quizcategory.read') }}">Back</a></li>
+                            <li class="breadcrumb-item">
+                                <a
+                                    href="{{ route('teacher.essay.read', ['quiz_category_id' => $question->quiz_category_id]) }}">Back</a>
+                            </li>
+
+
                             <li class="breadcrumb-item active">Senarai Soalan Essay</li>
                         </ol>
                     </div>

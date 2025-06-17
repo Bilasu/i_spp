@@ -27,7 +27,7 @@
                 @if (Session::has('error'))
                     <div class="alert alert-danger">{{ Session::get('error') }}</div>
                 @endif
-                <a href="../../index2.html" class="h1"><b>Teacher</b>Login</a>
+                <a class="h1"><b>Teacher</b>Login</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Login to your account</p>

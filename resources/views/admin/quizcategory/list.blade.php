@@ -118,6 +118,7 @@
                                                 <td>
                                                     {{ $item->name }}
                                                 </td>
+
                                                 <td>
                                                     <a href="{{ route('admin.quiz.read', $item->id) }}"
                                                         class="btn btn-outline-primary btn-sm rounded-pill">
@@ -132,7 +133,9 @@
                                                         📝 Kertas 3
                                                     </a>
                                                 </td>
-
+                                                <td>
+                                                    {{ $item->status }}
+                                                </td>
 
                                                 <td>
                                                     {{ $item->created_at->format('d-m-Y') }}
@@ -254,12 +257,13 @@
                                         <tr>
 
                                             <th>Name of Category Types of Quiz</th>
+                                            <th>Type of Quiz</th>
                                             <th>Status</th>
                                             <th>Created At</th>
 
-                                            {{-- <th>Password</th> --}}
                                             {{-- <th>Role</th>
-                                            <th>Status</th>  --}}
+                                            <th>Status</th> --}}
+
                                             <th>Edit</th>
 
                                         </tr>

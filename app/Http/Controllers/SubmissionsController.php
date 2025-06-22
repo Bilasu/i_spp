@@ -67,7 +67,19 @@ class SubmissionsController extends Controller
             'comment' => $request->comment,
 
         ]);
+        // dd([
+        //     'original' => $originalFilename,
+        //     'clean' => $cleanFilename,
+        //     'full_path' => 'uploads/' . $cleanFilename,
+        //     'exists' => Storage::disk('public')->exists('uploads/' . $cleanFilename),
+        // ]);
 
+        // \Log::info('Saving submission:', [
+        //     'assignment_id' => $assignmentId,
+        //     'student_ic' => $student_ic,
+        //     'file_path' => $filePath,
+        //     'comment' => $request->comment
+        // ]);
         return redirect()
             ->route('student.submission.index', $assignmentId)
             ->with('success', 'Assignment submitted successfully.');
@@ -75,50 +87,63 @@ class SubmissionsController extends Controller
 
     public function update(Request $request, $assignmentId)
     {
+        // Validate input
         $request->validate([
-            'file' => 'nullable|file|max:1048576', // Tak wajib kalau cuma nak tukar komen
+            'file' => 'nullable|file|max:1048576', // max 1GB (1,048,576 KB)
             'comment' => 'nullable|string|max:500',
         ]);
 
-        $student_ic = Auth::user()->ic;
-        $assignment = Assignment::findOrFail($assignmentId);
+        // Check if student is logged in via student guard
+        $student = Auth::guard('student')->user();
+        if (!$student) {
+            return redirect()->back()->with('error', 'Student not authenticated.');
+        }
 
+        $student_ic = $student->ic;
+
+        // Retrieve assignment and existing submission
+        $assignment = Assignment::findOrFail($assignmentId);
         $submission = Submission::where('assignment_id', $assignmentId)
             ->where('student_ic', $student_ic)
             ->firstOrFail();
 
-        $late = now()->gt($assignment->due_date); // Check jika lewat
+        $late = now()->gt($assignment->due_date); // Check if submission is late
 
-        // Kalau pelajar upload fail baru
+        // If a new file is uploaded
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $originalFilename = $file->getClientOriginalName();
 
-            // Buat folder jika belum ada
+            // Create 'uploads' folder if not exists
             if (!Storage::disk('public')->exists('uploads')) {
                 Storage::disk('public')->makeDirectory('uploads');
             }
 
-            // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+            // Clean filename to avoid special characters
             $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
 
-            // Simpan fail
+            // Store file
             Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
 
-            // Simpan nama fail dalam database
+            // Update file path in database
             $submission->file_path = 'uploads/' . $cleanFilename;
         }
-
-        // Update komen dan masa serahan
+        // dd([
+        //     'original' => $originalFilename,
+        //     'clean' => $cleanFilename,
+        //     'full_path' => 'uploads/' . $cleanFilename,
+        //     'exists' => Storage::disk('public')->exists('uploads/' . $cleanFilename),
+        // ]);
+        // Update comment (timestamp updated automatically by Eloquent)
         $submission->comment = $request->comment;
-        $submission->submitted_at = now();
         $submission->save();
 
+        // Redirect with success message
         return redirect()
-            ->route('student.classroom.index', $assignmentId)
+            ->route('student.submission.index', $assignmentId)
             ->with('success', $late
-                ? 'Assignment submitted successfully. <strong>Your submission is stated as being late</strong>'
-                : 'Assignment submitted successfully.');
+                ? 'Assignment updated successfully. <strong>Your submission is marked as late.</strong>'
+                : 'Assignment updated successfully.');
     }
 
     public function download($file)

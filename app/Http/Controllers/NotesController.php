@@ -164,8 +164,8 @@ class NotesController extends Controller
             // Simpan nama fail dalam database
             $notes->file = $cleanFilename;
         }
-        $path = Storage::disk('public')->path('uploads/' . $originalFilename);
-        dd($path, file_exists($path));
+        // $path = Storage::disk('public')->path('uploads/' . $originalFilename);
+        // dd($path, file_exists($path));
 
         $notes->save();
 

@@ -7,6 +7,7 @@ use App\Models\Notetypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
 
@@ -48,7 +49,7 @@ class NotesController extends Controller
     {
         $request->validate([
             'desc' => 'required',
-            'file' => 'required|mimes:pdf,xls,xlsx,ppt,pptx|max:20480',
+            'file' => 'required|mimes:pdf,xls,xlsx,ppt,pptx|max:1048576',
             'notetypes_id' => 'required',
         ]);
 
@@ -65,10 +66,17 @@ class NotesController extends Controller
                 Storage::disk('public')->makeDirectory('uploads');
             }
 
-            Storage::disk('public')->putFileAs('uploads', $file, $originalFilename);
-            $data->file = $originalFilename;
-        }
+            // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+            $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
 
+            // Simpan fail
+            Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
+
+            // Simpan nama fail dalam database
+            $data->file = $cleanFilename;
+        }
+        // $path = Storage::disk('public')->path('uploads/' . $originalFilename);
+        // dd($path, file_exists($path));
         $data->save();
 
         if (Auth::guard('admin')->check()) {
@@ -119,7 +127,7 @@ class NotesController extends Controller
             // 'name' => 'required',
             'desc' => 'required',
             'notetypes_id' => 'required',
-            'file' => 'nullable|mimes:pdf,xls,xlsx,ppt,pptx|max:20480',
+            'file' => 'nullable|mimes:pdf,xls,xlsx,ppt,pptx|max:1048576',
         ]);
 
         $notes = Notes::findOrFail($id);
@@ -153,6 +161,9 @@ class NotesController extends Controller
             // Simpan nama fail dalam database
             $notes->file = $originalFilename;
         }
+        $path = Storage::disk('public')->path('uploads/' . $originalFilename);
+        dd($path, file_exists($path));
+
         $notes->save();
 
         if (Auth::guard('admin')->check()) {

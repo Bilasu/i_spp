@@ -88,7 +88,8 @@
                                         <div id="customButtons" class="btn-group float-sm-right"></div>
                                     </div>
                                 </div>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: auto; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -107,8 +108,9 @@
                                             <tr>
                                                 <!-- File Download Link -->
                                                 <td style="width: auto; white-space: normal; word-wrap: break-word;">
-                                                    <a href="{{ asset('storage/uploads/' . $item->file) }}">
-                                                        Download
+                                                    <a href="{{ asset('storage/uploads/' . urlencode($item->file)) }}"
+                                                        download>
+                                                        {{ $item->file }}
                                                     </a>
 
                                                 </td>

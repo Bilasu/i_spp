@@ -88,8 +88,7 @@
                                         <div id="customButtons" class="btn-group float-sm-right"></div>
                                     </div>
                                 </div>
-                                <table id="example1" class="table table-bordered table-striped"
-                                    style="table-layout: auto; width: 70%;">
+                                <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
 
@@ -99,8 +98,8 @@
                                             <th>Note Type</th>
                                             <th>Created At</th>
                                             {{-- <th>Download</th> --}}
-                                            <th>Edit</th>
-                                            <th>Delete</th>
+                                            <th>Action</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -127,13 +126,12 @@
                                                 <td>
                                                     <a href="" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editNotesModal{{ $item->id }}">Edit</a>
-                                                </td>
 
-                                                <!-- Delete Button -->
-                                                <td>
-                                                    <a href="" class="btn btn-danger" data-toggle="modal"
+                                                    |<a href="" class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteNotesModal{{ $item->id }}">Delete</a>
                                                 </td>
+
+
                                             </tr>
 
 

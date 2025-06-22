@@ -107,12 +107,12 @@
                                         @foreach ($notes as $item)
                                             <tr>
                                                 <!-- File Download Link -->
-                                                <td style="width: auto; white-space: normal; word-wrap: break-word;">
-                                                    <a href="{{ asset('storage/uploads/' . urlencode($item->file)) }}"
-                                                        download>
+                                                <td
+                                                    style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    <a href="{{ asset('storage/uploads/' . $item->file) }}" download
+                                                        title="{{ $item->file }}">
                                                         {{ $item->file }}
                                                     </a>
-
                                                 </td>
 
                                                 <!-- Description -->

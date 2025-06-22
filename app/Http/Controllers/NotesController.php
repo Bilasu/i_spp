@@ -150,16 +150,19 @@ class NotesController extends Controller
             $file = $request->file('file');
             $originalFilename = $file->getClientOriginalName();
 
-            // Pastikan folder wujud
+            // Buat folder jika belum ada
             if (!Storage::disk('public')->exists('uploads')) {
                 Storage::disk('public')->makeDirectory('uploads');
             }
 
+            // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+            $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
             // Simpan fail
-            Storage::disk('public')->putFileAs('uploads', $file, $originalFilename);
+            Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
 
             // Simpan nama fail dalam database
-            $notes->file = $originalFilename;
+            $notes->file = $cleanFilename;
         }
         $path = Storage::disk('public')->path('uploads/' . $originalFilename);
         dd($path, file_exists($path));

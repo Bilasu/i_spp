@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\Assignment;
 use App\Models\Submission;
 
@@ -42,8 +43,20 @@ class SubmissionsController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $originalFilename = $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $originalFilename);
-            $filePath = $originalFilename;
+
+            // Buat folder jika belum ada
+            if (!Storage::disk('public')->exists('uploads')) {
+                Storage::disk('public')->makeDirectory('uploads');
+            }
+
+            // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+            $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
+            // Simpan fail
+            Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
+
+            // Simpan nama fail dalam database
+            $filePath = 'uploads/' . $cleanFilename;
         }
 
         // Cipta submission baru
@@ -78,14 +91,22 @@ class SubmissionsController extends Controller
 
         // Kalau pelajar upload fail baru
         if ($request->hasFile('file')) {
-            // Padam fail lama jika ada
-            if ($submission->file_path && Storage::disk('public')->exists($submission->file_path)) {
-                Storage::disk('public')->delete($submission->file_path);
+            $file = $request->file('file');
+            $originalFilename = $file->getClientOriginalName();
+
+            // Buat folder jika belum ada
+            if (!Storage::disk('public')->exists('uploads')) {
+                Storage::disk('public')->makeDirectory('uploads');
             }
 
-            // Simpan fail baru
-            $filePath = $request->file('file')->store('uploads', 'public');
-            $submission->file_path = $filePath;
+            // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+            $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
+            // Simpan fail
+            Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
+
+            // Simpan nama fail dalam database
+            $submission->file = $cleanFilename;
         }
 
         // Update komen dan masa serahan

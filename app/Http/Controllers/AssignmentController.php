@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AssignmentController extends Controller
 {
@@ -70,8 +71,20 @@ class AssignmentController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $originalFilename = $file->getClientOriginalName();
-                $file->storeAs('uploads', $originalFilename, 'public'); // ✅ Safe for Railway
-                $assignment->file = $originalFilename;
+
+                // Buat folder jika belum ada
+                if (!Storage::disk('public')->exists('uploads')) {
+                    Storage::disk('public')->makeDirectory('uploads');
+                }
+
+                // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+                $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
+                // Simpan fail
+                Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
+
+                // Simpan nama fail dalam database
+                $assignment->file = $cleanFilename;
             }
 
             $assignment->save();
@@ -145,13 +158,22 @@ class AssignmentController extends Controller
 
                 // Handle the file upload if a new file is uploaded
                 if ($request->hasFile('file')) {
-                    // Delete old file if it exists
-                    if ($assignment->file_path && Storage::disk('public')->exists($assignment->file_path)) {
-                        Storage::disk('public')->delete($assignment->file_path);
+                    $file = $request->file('file');
+                    $originalFilename = $file->getClientOriginalName();
+
+                    // Buat folder jika belum ada
+                    if (!Storage::disk('public')->exists('uploads')) {
+                        Storage::disk('public')->makeDirectory('uploads');
                     }
 
-                    // Save the new file
-                    $assignment->file_path = $request->file('file')->store('uploads', 'public');
+                    // Bersihkan nama fail (buang space, tanda pelik, dan buat lowercase)
+                    $cleanFilename = Str::slug(pathinfo($originalFilename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
+                    // Simpan fail
+                    Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
+
+                    // Simpan nama fail dalam database
+                    $assignment->file = $cleanFilename;
                 }
 
                 // Update assignment data

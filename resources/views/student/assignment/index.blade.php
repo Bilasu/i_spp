@@ -68,7 +68,7 @@
                                             <p><strong>Assignment File:</strong><br>
                                             <div
                                                 style="background-color: rgba(200, 200, 200, 0.3); padding: 15px; border-radius: 10px; display: inline-block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.3s;">
-                                                <a href="{{ asset('storage/uploads/' . $assignment->file_path) }}"
+                                                <a href="{{ asset('storage/uploads/' . urlencode($assignment->file_path)) }}"
                                                     target="_blank" download
                                                     style="text-decoration: none; color: #1e88e5; font-weight: bold; display: flex; align-items: center; gap: 10px;">
                                                     <i class="fas fa-download"></i> Download Assignment File
@@ -122,11 +122,12 @@
                                             <p><strong>Your Submitted File:</strong>
                                             <div
                                                 style="background-color: rgba(200, 200, 200, 0.3); padding: 15px; border-radius: 10px; display: inline-block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: 0.3s;">
-                                                <a href="{{ asset('storage/uploads/' . $studentSubmission->file_path) }}"
+                                                <a href="{{ asset('storage/uploads/' . urlencode($studentSubmission->file_path)) }}"
                                                     target="_blank" download
                                                     style="text-decoration: none; color: #1e88e5; font-weight: bold; display: flex; align-items: center; gap: 10px;">
                                                     <i class="fas fa-download"></i> Download Submitted File
                                                 </a>
+
                                             </div>
                                             </p>
                                         @endif

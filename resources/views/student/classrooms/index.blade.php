@@ -178,7 +178,7 @@
                                         </table>
                                     </div>
                                 @else
-                                    <p class="text-muted">No aasignment yet for this class</p>
+                                    <p class="text-muted">No asignment yet for this class</p>
                                 @endif
                             </div>
                         </div>

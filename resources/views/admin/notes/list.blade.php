@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <table id="example1" class="table table-bordered table-striped"
-                                    style="table-layout: fixed; width: 100%;">
+                                    style="table-layout: auto; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -106,35 +106,34 @@
                                     <tbody>
                                         @foreach ($notes as $item)
                                             <tr>
-
-                                                <td
-                                                    style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <!-- File Download Link -->
+                                                <td style="width: auto; white-space: normal; word-wrap: break-word;">
                                                     <a href="{{ asset('storage/uploads/' . $item->file) }}" target="_blank"
-                                                        download title="{{ $item->file }}">
+                                                        download title="Download {{ $item->file }}">
                                                         {{ $item->file }}
                                                     </a>
                                                 </td>
 
+                                                <!-- Description -->
                                                 <td>{{ $item->desc }}</td>
-                                                {{-- <td>{{ $item->file }}</td> --}}
+
+                                                <!-- Note Type -->
                                                 <td>{{ $item->Notetypes->name }}</td>
+
+                                                <!-- Created At -->
                                                 <td>{{ $item->created_at }}</td>
 
-                                                {{-- <td><a href="{{ route('admin.notes.download', $item->file) }}"
-                                                        class="btn btn-primary">Download</a></td> --}}
-
-
-                                                <td><a href="" class="btn btn-primary" data-toggle="modal"
+                                                <!-- Edit Button -->
+                                                <td>
+                                                    <a href="" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editNotesModal{{ $item->id }}">Edit</a>
                                                 </td>
 
-                                                <td><a href="" class="btn btn-danger" data-toggle="modal"
+                                                <!-- Delete Button -->
+                                                <td>
+                                                    <a href="" class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteNotesModal{{ $item->id }}">Delete</a>
                                                 </td>
-
-
-
-
                                             </tr>
 
 

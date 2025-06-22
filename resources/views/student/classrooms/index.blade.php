@@ -122,7 +122,8 @@
                                     <h6 class="mt-3">Senarai Tugasan:</h6>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped assignment-table"
-                                            id="assignment-table-{{ $classroom->id }}">
+                                            id="assignment-table-{{ $classroom->id }}"
+                                            style="table-layout: fixed; width: 100%;">
                                             <thead style="background-color: #1e88e5; color: white;"
                                                 class="table table-bordered">
                                                 <tr>
@@ -149,18 +150,18 @@
                                                                 $end = \Carbon\Carbon::parse($assignment->due_date);
                                                             @endphp
                                                             @if ($now->lt($end))
-                                                                <p>Masih berbaki
+                                                                <p>Still Remaining
                                                                     {{ $now->diffForHumans($end, ['parts' => 2, 'join' => true, 'syntax' => 1]) }}
-                                                                    sebelum tarikh tamat.</p>
+                                                                    before deadline</p>
                                                             @else
-                                                                <p>Tugasan telah tamat.</p>
-                                                                <span class="badge badge-danger">Sudah Tamat</span>
+                                                                <p>Assignment due already end</p>
+                                                                <span class="badge badge-danger">Already Due</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <a href="{{ route('student.submission.index', $assignment->id) }}"
                                                                 class="btn btn-sm btn-primary">
-                                                                Jawab / Hantar
+                                                                Submit
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -171,13 +172,13 @@
                                                 <th>Description</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
-                                                <th> Remaining Time</th>
+                                                <th>Remaining Time</th>
                                                 <th>Acion</th>
                                             </tfoot>
                                         </table>
                                     </div>
                                 @else
-                                    <p class="text-muted">Tiada tugasan untuk kelas ini.</p>
+                                    <p class="text-muted">No aasignment yet for this class</p>
                                 @endif
                             </div>
                         </div>

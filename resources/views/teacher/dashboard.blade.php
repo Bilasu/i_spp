@@ -69,12 +69,7 @@
                                 'icon' => 'fas fa-school',
                                 'color' => 'success',
                             ],
-                            [
-                                'label' => 'Ongoing Exams',
-                                'value' => $ongoingExams,
-                                'icon' => 'fas fa-tasks',
-                                'color' => 'warning',
-                            ],
+
                             [
                                 'label' => 'Marks Submitted',
                                 'value' => $totalMarksSubmitted,
@@ -105,7 +100,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="text-center">Grade Distribution for Kelas: {{ $classGrade['class'] }}</h5>
+                                    <h5 class="text-center">Grade Distribution for Class: {{ $classGrade['class'] }}</h5>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="gradePieChart{{ $index }}"

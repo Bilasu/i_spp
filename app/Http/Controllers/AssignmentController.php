@@ -70,14 +70,14 @@ class AssignmentController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $originalFilename = $file->getClientOriginalName();
-                $file->move(public_path('uploads'), $originalFilename);
-                $assignment->file_path = $originalFilename;
+                $file->storeAs('uploads', $originalFilename, 'public'); // ✅ Safe for Railway
+                $assignment->file = $originalFilename;
             }
 
             $assignment->save();
 
             return redirect()->route('teacher.assignment.index', ['classroom' => $classroomId])
-                ->with('success', 'Tugasan berjaya ditambah.');
+                ->with('success', 'Assignment added successfully.');
         }
     }
 
@@ -166,7 +166,7 @@ class AssignmentController extends Controller
                 return redirect()->route('teacher.assignment.index', ['classroom' => $request->classroom_id])
                     ->with('success', 'Tugasan berjaya dikemas kini.');
             } catch (\Exception $e) {
-                return back()->with('error', 'Ralat semasa mengemas kini tugasan: ' . $e->getMessage());
+                return back()->with('error', 'Error went updating assignment: ' . $e->getMessage());
             }
         }
     }
@@ -185,9 +185,9 @@ class AssignmentController extends Controller
             $assignment->delete();
 
             return redirect()->route('teacher.assignment.index', ['classroom' => $assignment->classroom_id])
-                ->with('success', 'Tugasan berjaya dipadam.');
+                ->with('success', 'Assignment deleted successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Ralat semasa memadam tugasan: ' . $e->getMessage());
+            return back()->with('error', 'Error went deleting assignment: ' . $e->getMessage());
         }
     }
 

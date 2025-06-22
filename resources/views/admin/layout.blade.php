@@ -116,7 +116,7 @@
                                 <li class="nav-item">
                                     <a href={{ route('teacher.read') }} class="nav-link">
                                         <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                        <p>Teacher Management</p>
+                                        <p style="font-size: 25px; margin-left: 30px;">Teacher Management</p>
                                     </a>
                                 </li>
                                 {{-- <li class="nav-item">

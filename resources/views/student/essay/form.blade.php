@@ -14,13 +14,13 @@
             <div class="container-fluid">
                 <div class="row mb-2 align-items-center">
                     <div class="col-sm-6">
-                        <h4><i class="bi bi-pencil-square me-2"></i>Jawab Soalan Essay</h4>
+                        <h4><i class="bi bi-pencil-square me-2"></i>Answer Essay Question</h4>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('student.classrooms.index') }}">Back</a></li>
-                            <li class="breadcrumb-item active">My Class</li>
+                            <li class="breadcrumb-item active">Essay Questions</li>
                         </ol>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
 
                 {{-- Kategori --}}
                 <div class="mb-4">
-                    <p><strong>Kategori:</strong> {{ $category->name }}</p>
+                    <p><strong>Category Question:</strong> {{ $category->name }}</p>
                 </div>
 
                 {{-- Unanswered Questions --}}
@@ -59,7 +59,7 @@
                 @if ($unansweredQuestions->isEmpty())
                     <div class="alert alert-info d-flex align-items-center">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        Anda telah menjawab semua soalan dalam kategori ini.
+                        You already answer all questions in this category.
                     </div>
                 @else
                     @foreach ($unansweredQuestions as $index => $question)
@@ -70,7 +70,8 @@
 
                             <div class="card shadow-sm border-0">
                                 <div class="card-header bg-primary text-white">
-                                    <strong>Soalan {{ $loop->iteration }}:</strong> {{ $question->question }}
+                                    <strong>Question {{ $loop->iteration }}:</strong> {{ $question->question }}
+
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -79,6 +80,11 @@
                                     <div class="text-end">
                                         <button type="submit" class="btn btn-success">
                                             <i class="bi bi-send-check-fill me-1"></i> Hantar Jawapan
+                                            @if ($question->mark_total)
+                                                <input type="number" value="{{ $question->mark_total }}"
+                                                    class="form-control form-control-sm d-inline-block" readonly
+                                                    style="width: 80px;">
+                                            @endif
                                         </button>
                                     </div>
                                 </div>
@@ -119,7 +125,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search notetypes..."
+                    searchPlaceholder: "🔍 Search essay questions..."
                 }
             });
 

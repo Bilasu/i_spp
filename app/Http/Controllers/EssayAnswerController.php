@@ -37,49 +37,49 @@ class EssayAnswerController extends Controller
     {
         $request->validate([
             'mark_obtained' => 'required|numeric|min:0',
-            'mark_total' => 'required|numeric|min:1',
             'comments' => 'nullable|string',
         ]);
 
-        $obtained = $request->input('mark_obtained');
-        $total = $request->input('mark_total');
+        $answer = EssayAnswer::findOrFail($answer_id);
+        $total = $answer->question->mark_total; // Dapatkan dari table essay_questions
 
-        // Custom logic: Jika markah diperoleh > markah penuh
-        if ($obtained > $total) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors(['mark_obtained' => 'Markah diperoleh tidak boleh melebihi markah penuh.']);
+        if ($request->mark_obtained > $total) {
+            return back()->withInput()->withErrors([
+                'mark_obtained' => 'Obtained mark cannot exceed total mark.'
+            ]);
         }
 
-        $markString = "{$obtained}/{$total}";
-
-        $answer = EssayAnswer::findOrFail($answer_id);
-        $answer->mark = (string) $markString;
-        $answer->comment = $request->input('comments');
+        $answer->mark = $request->mark_obtained; // ✅ Simpan hanya nilai markah pelajar (integer)
+        $answer->comment = $request->comments;
         $answer->save();
 
-        return redirect()->back()->with('success', 'Markah dan komen telah disimpan.');
+        return redirect()->back()->with('success', 'Mark and comments have been saved.');
     }
+
 
     public function adminmark(Request $request, $answer_id)
     {
-        //dd($request->all()); // debug step 1
-
         $request->validate([
-            'mark' => 'required|numeric|min:0|max:100',
+            'mark_obtained' => 'required|numeric|min:0',
             'comments' => 'nullable|string',
         ]);
 
         $answer = EssayAnswer::findOrFail($answer_id);
+        $total = $answer->question->mark_total; // Dapatkan dari table essay_questions
 
-        $answer->mark = $request->input('mark');
-        $answer->comment = $request->input('comments');
+        if ($request->mark_obtained > $total) {
+            return back()->withInput()->withErrors([
+                'mark_obtained' => 'Obatined mark cannot exceed total mark.'
+            ]);
+        }
+
+        $answer->mark = $request->mark_obtained; // ✅ Simpan hanya nilai markah pelajar (integer)
+        $answer->comment = $request->comments;
         $answer->save();
 
-        //dd($answer); // debug step 2
-
-        return redirect()->back()->with('success', 'Markah dan komen telah disimpan.');
+        return redirect()->back()->with('success', 'Mark and comments have been saved.');
     }
+
     // Papar semua jawapan (untuk admin/cikgu semak)
     public function reviewAnswers()
     {
@@ -100,7 +100,7 @@ class EssayAnswerController extends Controller
         $answer->comment = $request->comment;
         $answer->save();
 
-        return back()->with('success', 'Markah dan komen berjaya disimpan!');
+        return back()->with('success', 'Mark ');
     }
 
 
@@ -135,7 +135,7 @@ class EssayAnswerController extends Controller
             $question = EssayQuestion::find($questionId);
 
             if (!$question) {
-                return back()->with('error', 'Soalan tidak wujud.');
+                return back()->with('error', 'No question found with');
             }
 
             // Check if the student has already answered this question
@@ -155,7 +155,7 @@ class EssayAnswerController extends Controller
         }
 
         return redirect()->route('student.essay.viewAnswer', $request->category_id)
-            ->with('success', 'Jawapan berjaya dihantar!');
+            ->with('success', 'Answer submitted successfully.');
     }
 
     // Papar semula jawapan pelajar

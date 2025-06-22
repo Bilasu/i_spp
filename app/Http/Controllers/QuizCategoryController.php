@@ -80,11 +80,11 @@ class QuizCategoryController extends Controller
         // Redirect balik ke list kategori (bukan terus ke kuiz)
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.quizcategory.read')
-                ->with('success', 'Category Added Successfully. You may now add questions (Kertas 1 / Kertas 2 / Kertas 3).');
+                ->with('success', 'Category Added Successfully. You may now add questions .');
         }
 
         return redirect()->route('admin.quizcategory.read')
-            ->with('success', 'Category Added Successfully. You may now add questions (Kertas 1 / Kertas 2 / Kertas 3).');
+            ->with('success', 'Category Added Successfully. You may now add questions .');
     }
 
     /**

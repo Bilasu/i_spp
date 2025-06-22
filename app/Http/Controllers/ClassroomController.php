@@ -24,8 +24,10 @@ class ClassroomController extends Controller
             $studentsWithoutClass = User::where('role', 'student')
                 ->whereDoesntHave('classrooms') // Only students without any class
                 ->get();
-
-            return view('admin.classrooms.list', compact('classrooms', 'teachers', 'studentsWithoutClass', 'students'));
+            // ✅ Dapatkan class_name yang sudah digunakan
+            $usedClassNames = Classroom::pluck('class_name')->toArray();
+            // dd($usedClassNames);
+            return view('admin.classrooms.list', compact('classrooms', 'teachers', 'studentsWithoutClass', 'students', 'usedClassNames'));
         }
         // Handle Teacher view
         elseif (Auth::guard('teacher')->check()) {
@@ -102,18 +104,45 @@ class ClassroomController extends Controller
             ->whereDoesntHave('classrooms') // pastikan tiada kelas langsung
             ->get();
 
+        $validClassNames = [
+            '4 Acalaypha',
+            '4 Alyssium',
+            '4 Andalas',
+            '4 Aster',
+            '4 Amarilis',
+            '4 Allium',
+            '4 Azalea',
+            '5 Acalyapha',
+            '5 Alyssium',
+            '5 Andalas',
+            '5 Aster',
+            '5 Amarilis',
+            '5 Allium',
+            '5 Azalea',
+        ];
+
         // Validasi input
         $request->validate([
-            'class_name' => 'required|string|max:255',
+            'class_name' => 'required|in:' . implode(',', $validClassNames),
             'teacher_ic' => 'required|exists:users,ic',
             'students' => 'nullable|array',
             'students.*' => 'exists:users,ic',
         ]);
 
+        // ✅ Normalize class_name (trim + title case)
+        $normalizedClassName = ucwords(strtolower(trim($request->class_name)));
+
+        // ✅ Cek kalau class_name dah wujud (case insensitive)
+        $existing = Classroom::whereRaw('LOWER(TRIM(class_name)) = ?', [strtolower(trim($request->class_name))])->first();
+
+        if ($existing) {
+            return back()->with('error', 'Class name already exists.');
+        }
+
         try {
-            // Cipta kelas, jika class_name sudah ada dalam database, dia akan throw error
+            // Cipta kelas
             $classroom = Classroom::create([
-                'class_name' => $request->class_name,
+                'class_name' => $normalizedClassName,
             ]);
 
             // Sambungkan guru
@@ -127,16 +156,9 @@ class ClassroomController extends Controller
             }
 
             // Jika berjaya
-            return redirect()->route('admin.classrooms.read')->with('success', 'Kelas berjaya ditambah.');
+            return redirect()->route('admin.classrooms.read')->with('success', 'Class added successfully.');
         } catch (\Illuminate\Database\QueryException $ex) {
-            // Menangkap exception untuk duplikat class_name
-            if ($ex->getCode() == 23000) {
-                // Menangkap duplicate entry error untuk class_name
-                return back()->with('error', 'The class already exists.');
-            }
-
-            // Jika error lain berlaku
-            return back()->with('error', 'Gagal mencipta kelas: ' . $ex->getMessage());
+            return back()->with('error', 'Error adding class: ' . $ex->getMessage());
         }
     }
 
@@ -145,9 +167,25 @@ class ClassroomController extends Controller
     {
         $classroom = Classroom::findOrFail($id);
 
+        $validClassNames = [
+            '4 Acalyapha',
+            '4 Alyssium',
+            '4 Andalas',
+            '4 Aster',
+            '4 Amarilis',
+            '4 Allium',
+            '4 Azalea',
+            '5 Acalyapha',
+            '5 Alyssium',
+            '5 Andalas',
+            '5 Aster',
+            '5 Amarilis',
+            '5 Allium',
+            '5 Azalea',
+        ];
         // Validation
         $request->validate([
-            'class_name' => 'required|string',
+            'class_name' => 'required|in:' . implode(',', $validClassNames),
             'teacher_ic' => 'required|exists:users,ic',
             'student_ics' => 'nullable|array',
             'student_ics.*' => 'exists:users,ic',
@@ -180,7 +218,7 @@ class ClassroomController extends Controller
 
         // If no changes made
         if (!$teacherChanged && !$studentsChanged && !$statusChanged && !$classNameChanged) {
-            return back()->with('error', 'Sila buat perubahan sebelum menghantar.');
+            return back()->with('error', 'Please update something before submitting.');
         }
 
         // Update classroom basic info
@@ -203,7 +241,7 @@ class ClassroomController extends Controller
             }
         }
 
-        return redirect()->route('admin.classrooms.read')->with('success', 'Maklumat kelas berjaya dikemas kini.');
+        return redirect()->route('admin.classrooms.read')->with('success', 'Class details updated successfully.');
     }
 
     public function updateByTeacher(Request $request, $id)
@@ -226,7 +264,7 @@ class ClassroomController extends Controller
 
         // Tiada perubahan
         if ($oldStudents == $newStudents) {
-            return back()->with('error', 'Sila buat perubahan sebelum menghantar.');
+            return back()->with('error', 'Please update something before submitting.');
         }
 
         // Detach semua pelajar lama
@@ -237,6 +275,6 @@ class ClassroomController extends Controller
             $classroom->users()->attach($ic, ['role' => 'student']);
         }
 
-        return redirect()->route('teacher.classrooms.index')->with('success', 'Senarai pelajar berjaya dikemaskini.');
+        return redirect()->route('teacher.classrooms.index')->with('success', 'Student details updated successfully.');
     }
 }

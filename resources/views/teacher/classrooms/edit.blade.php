@@ -10,11 +10,11 @@
 @section('content')
     <div class="content-wrapper" style="margin-left: 250px; padding: 20px;">
         <div class="container-fluid">
-            <h1 class="mb-4">Kemaskini Kelas</h1>
+            <h1 class="mb-4">Edit Kelas</h1>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
-                    <strong>Ralat!</strong> Sila semak input anda.
+                    <strong>Ralat!</strong> Please check the following errors.
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>

@@ -13,13 +13,13 @@
             <div class="container-fluid">
                 <div class="row mb-2 align-items-center">
                     <div class="col-sm-6">
-                        <h4><i class="bi bi-pencil-square me-2"></i> Jawapan Anda - {{ $category->name }}</h4>
+                        <h4><i class="bi bi-pencil-square me-2"></i> Your answer - {{ $category->name }}</h4>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('student.quizcategory.read') }}">Back</a></li>
-                            <li class="breadcrumb-item active">My Class</li>
+                            <li class="breadcrumb-item active">My Subjective Answers List</li>
                         </ol>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
 
                 <!-- Progress Section -->
                 <div class="mb-4">
-                    <h5 class="mb-2">Kemajuan Jawapan: {{ $answeredCount }} / {{ $totalQuestions }}</h5>
+                    <h5 class="mb-2">Answer Progress: {{ $answeredCount }} / {{ $totalQuestions }}</h5>
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" style="width: {{ $progress }}%">
                             {{ $progress }}%
@@ -61,13 +61,13 @@
                 @if ($answeredQuestions->isEmpty())
                     <div class="alert alert-info d-flex align-items-center mt-4">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        Anda belum menjawab mana-mana soalan dalam kategori ini.
+                        You have not answered any questions in this category.
                     </div>
                 @else
                     <!-- Kotak Besar -->
                     <div class="card shadow border-0 mb-5">
                         <div class="card-header bg-dark text-white">
-                            <h5 class="mb-0"><i class="bi bi-journal-check me-2"></i> Senarai Jawapan Subjektif</h5>
+                            <h5 class="mb-0"><i class="bi bi-journal-check me-2"></i> My List of Subjective Answers</h5>
                         </div>
                         <div class="card-body">
                             @foreach ($answeredQuestions as $index => $question)
@@ -78,19 +78,26 @@
                                 <!-- Kotak Kecil Soalan -->
                                 <div class="card mb-4 shadow-sm border">
                                     <div class="card-header bg-primary text-white">
-                                        <strong>Soalan {{ $loop->iteration }}:</strong> {{ $question->question }}
+                                        <strong>Question {{ $loop->iteration }}:</strong> {{ $question->question }}
                                     </div>
                                     <div class="card-body">
-                                        <p><strong>Jawapan Anda:</strong></p>
+                                        <p><strong>Your answer:</strong></p>
                                         <div class="p-3 bg-light border rounded mb-3">
                                             {{ $answer->answer ?? '-' }}
                                         </div>
 
-                                        <p><strong>Markah:</strong>
-                                            @if ($answer && $answer->mark !== null)
-                                                <span class="badge bg-success">{{ $answer->mark }}/100</span>
+                                        <p><strong>Mark:</strong>
+                                            @php
+                                                $markParts = explode('/', $answer->mark ?? '');
+                                                $obtained = $markParts[0] ?? null;
+                                                $total = $markParts[1] ?? null;
+                                            @endphp
+
+                                            @if ($answer && $obtained !== null && $total !== null)
+                                                <span class="badge bg-success">{{ $obtained }} /
+                                                    {{ $total }}</span>
                                             @else
-                                                <span class="badge bg-secondary">Belum dinilai</span>
+                                                <span class="badge bg-secondary">Not graded</span>
                                             @endif
                                         </p>
 
@@ -143,7 +150,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search notetypes..."
+                    searchPlaceholder: "🔍 Search subjective questions..."
                 }
             });
 

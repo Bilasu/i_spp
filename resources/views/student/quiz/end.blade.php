@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 align-items-center">
                     <div class="col-sm-6">
-                        <h1>Keputusan Kuiz</h1>
+                        <h1>Quiz Result</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right bg-transparent">
@@ -109,7 +109,7 @@
                                                     <th>Date</th>
                                                     <th class="text-center">Correct</th>
                                                     <th class="text-center">Wrong</th>
-                                                    <th class="text-center">Total</th>
+                                                    <th class="text-center">Total Questions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -168,7 +168,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search teachers..."
+                    searchPlaceholder: "🔍 Search quiz..."
                 }
             });
 

@@ -56,6 +56,7 @@ class EssayQuestionController extends Controller
         // Validate input
         $request->validate([
             'question' => 'required|string',
+            'mark_total' => 'required|numeric|min:5, max:100',
             'quiz_category_id' => 'required|exists:quiz_categories,id',
         ]);
 
@@ -68,17 +69,21 @@ class EssayQuestionController extends Controller
             abort(403, 'Unauthorized access.');
         }
 
-        // Simpan soalan subjektif
+        // Simpan ke dalam table (asingkan question dan mark_total)
         EssayQuestion::create([
             'question' => $request->question,
+            'mark_total' => $request->mark_total,
             'quiz_category_id' => $request->quiz_category_id,
             'created_by' => $user->ic,
         ]);
+
         // Redirect berdasarkan role pengguna
         if ($user->role === 'admin') {
-            return redirect()->route('admin.essay.read', ['quiz_category_id' => $request->quiz_category_id])->with('success', 'Soalan subjektif berjaya ditambah');
+            return redirect()->route('admin.essay.read', ['quiz_category_id' => $request->quiz_category_id])
+                ->with('success', 'Essay Question Added Successfully');
         } elseif ($user->role === 'teacher') {
-            return redirect()->route('teacher.essay.read', ['quiz_category_id' => $request->quiz_category_id])->with('success', 'Soalan subjektif berjaya ditambah');
+            return redirect()->route('teacher.essay.read', ['quiz_category_id' => $request->quiz_category_id])
+                ->with('success', 'Essay Question Added Successfully');
         } else {
             abort(403, 'Unauthorized access.');
         }
@@ -86,53 +91,59 @@ class EssayQuestionController extends Controller
 
 
 
+
+
     public function update(Request $request, $id)
     {
-        // Validate input
+        // Validasi input
         $request->validate([
             'question' => 'required|string',
+            'mark_total' => 'required|numeric|min:5',
             'quiz_category_id' => 'required|exists:quiz_categories,id',
         ]);
 
-        // Find the question to update
+        // Cari soalan untuk dikemaskini
         $question = EssayQuestion::findOrFail($id);
 
-        // Check if there's no change in the question
+        // Semak jika tiada sebarang perubahan
         if (
             $question->question === $request->question &&
+            $question->mark_total == $request->mark_total &&
             $question->quiz_category_id == $request->quiz_category_id
         ) {
-            return back()->with(['error' => 'Please make some changes before submitting.']);
+            return back()->with('error', 'Please update something before submitting!');
         }
 
-        // Update the question if there are changes
+        // Lakukan kemaskini
         $question->update([
             'question' => $request->question,
+            'mark_total' => $request->mark_total,
             'quiz_category_id' => $request->quiz_category_id,
         ]);
 
-        // Get the authenticated user using the correct guard
+        // Dapatkan pengguna ikut guard
         $user = Auth::guard('admin')->user()
             ?? Auth::guard('teacher')->user()
             ?? Auth::guard('student')->user();
 
-        // If no user is authenticated, abort with Unauthorized access
         if (!$user) {
             abort(403, 'Unauthorized access.');
         }
 
-        // Redirect based on role of the authenticated user
-        switch ($user->role) {
-            case 'admin':
-                return redirect()->route('admin.essay.read', ['quiz_category_id' => $request->quiz_category_id])
-                    ->with('success', 'Question updated successfully.');
-            case 'teacher':
-                return redirect()->route('teacher.essay.read', ['quiz_category_id' => $request->quiz_category_id])
-                    ->with('success', 'Question updated successfully.');
-            default:
-                abort(403, 'Unauthorized access.');
+        // Redirect ikut role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.essay.read', ['quiz_category_id' => $request->quiz_category_id])
+                ->with('success', 'Quetion updated successfully.');
+        } elseif ($user->role === 'teacher') {
+            return redirect()->route('teacher.essay.read', ['quiz_category_id' => $request->quiz_category_id])
+                ->with('success', ' Question updated successfully.');
+        } else {
+            abort(403, 'Unauthorized access.');
         }
     }
+
+
+
 
 
 
@@ -145,12 +156,12 @@ class EssayQuestionController extends Controller
         // Redirect ikut guard / role
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.essay.read', ['quiz_category_id' => $categoryId])
-                ->with('success', 'Soalan berjaya dipadam.');
+                ->with('success', 'Question deleted successfully.');
         }
 
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.essay.read', ['quiz_category_id' => $categoryId])
-                ->with('success', 'Soalan berjaya dipadam.');
+                ->with('success', 'Question deleted successfully.');
         }
 
         abort(403, 'Unauthorized access.');

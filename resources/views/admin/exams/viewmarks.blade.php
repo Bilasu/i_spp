@@ -48,14 +48,14 @@
             <div class="container-fluid mb-2">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3><i class="fas fa-file-alt"></i> Papar Markah Peperiksaan</h3>
+                        <h3><i class="fas fa-file-alt"></i> Examination Mark List</h3>
                     </div>
                     <div class="col-md-6 text-right">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('admin.exams.read') }}">Kembali</a></li>
-                                <li class="breadcrumb-item active">Senarai Markah</li>
+                                <li class="breadcrumb-item active"> Examination Mark List</li>
                             </ol>
                         </nav>
                     </div>
@@ -76,9 +76,9 @@
                             <table class="table table-bordered table-hover" id="example1">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th>Nama Pelajar</th>
-                                        <th>No. IC</th>
-                                        <th>Markah</th>
+                                        <th>Student Name</th>
+                                        <th>Student IC</th>
+                                        <th>Mark</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,7 +102,7 @@
                         </div>
 
                         <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">
-                            <i class="fas fa-arrow-left"></i> Kembali
+                            <i class="fas fa-arrow-left"></i> Back
                         </a>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                 ],
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Cari pelajar..."
+                    searchPlaceholder: "🔍 Find student..."
                 }
             });
         });
@@ -182,7 +182,7 @@
                     ],
                     language: {
                         search: '',
-                        searchPlaceholder: "🔍 Cari pelajar..."
+                        searchPlaceholder: "🔍 Find student..."
                     }
                 });
             }

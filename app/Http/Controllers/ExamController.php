@@ -42,7 +42,7 @@ class ExamController extends Controller
 
         // ❗ Check if exam name already exists
         if (Exam::where('name', $request->name)->exists()) {
-            return redirect()->route('admin.exams.read')->with('error', 'Peperiksaan dengan nama ini sudah wujud.');
+            return redirect()->route('admin.exams.read')->with('error', 'Examination with thse name already exists.');
         }
 
         // ✅ Simpan exam ke table 'exams'
@@ -55,7 +55,7 @@ class ExamController extends Controller
         // ✅ Attach kelas-kelas yang dipilih (table: classroom_exam)
         $exam->classrooms()->attach($request->classrooms);
 
-        return redirect()->route('admin.exams.read')->with('success', 'Peperiksaan berjaya ditambah!');
+        return redirect()->route('admin.exams.read')->with('success', 'Examination added successfully.');
     }
 
     // Show edit form for a specific exam
@@ -78,19 +78,19 @@ class ExamController extends Controller
 
         // ❗ Check if new name already exists in another exam
         if (Exam::where('name', $request->name)->where('id', '!=', $id)->exists()) {
-            return redirect()->back()->with('error', 'Peperiksaan dengan nama ini sudah wujud.');
+            return redirect()->back()->with('error', 'Examination with this name already exists.');
         }
 
         // Fill and check if anything changed
         $exam->fill($request->only('name', 'start_date', 'end_date'));
 
         if (!$exam->isDirty()) {
-            return redirect()->back()->with('error', 'Sila kemas kini sesuatu sebelum menghantar.');
+            return redirect()->back()->with('error', 'Please update something before submitting.');
         }
 
         $exam->save();
 
-        return redirect()->route('admin.exams.read')->with('success', 'Peperiksaan berjaya dikemas kini!');
+        return redirect()->route('admin.exams.read')->with('success', 'Examination updated successfully.');
     }
 
 
@@ -101,7 +101,7 @@ class ExamController extends Controller
         $exam = Exam::findOrFail($id);
         $exam->delete();
 
-        return redirect()->route('admin.exams.read')->with('success', 'Peperiksaan berjaya dipadam!');
+        return redirect()->route('admin.exams.read')->with('success', 'Examination deleted successfully.');
     }
 
     public function viewMarks($exam_id, $classroom_id)

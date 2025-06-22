@@ -25,8 +25,8 @@
             </div>
         </section>
         <div class="border p-3 mb-4 rounded">
-            <a href="#" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addExamModal">+ Tambah
-                Peperiksaan</a>
+            <a href="#" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addExamModal">Add Examination
+            </a>
             <!-- Success Message -->
             @if (session('success'))
                 <div class="alert alert-success">
@@ -41,7 +41,7 @@
                 </div>
             @endif
 
-            <table id="example1" class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped" style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr>
                         <th>Examination Name</th>
@@ -64,16 +64,16 @@
                                     ->count();
 
                                 $status = match (true) {
-                                    $marks_filled == 0 => 'Belum Mula',
-                                    $marks_filled < $total_students => 'Sedang Diisi',
-                                    default => 'Selesai',
+                                    $marks_filled == 0 => 'Not Started Yet',
+                                    $marks_filled < $total_students => 'In Progress ',
+                                    default => 'Completed',
                                 };
 
                                 // Set warna badge ikut status
                                 $badge = match ($status) {
-                                    'Belum Mula' => 'badge-secondary',
-                                    'Sedang Diisi' => 'badge-warning',
-                                    'Selesai' => 'badge-success',
+                                    'Not Started Yet' => 'badge-secondary',
+                                    'In Progress' => 'badge-warning',
+                                    'Completed' => 'badge-success',
                                 };
 
                                 // Generate URL ke page view markah
@@ -121,7 +121,7 @@
                                             @csrf
                                             {{-- @method('PUT') --}}
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Edit Peperiksaan</h5>
+                                                <h5 class="modal-title">Edit Examination</h5>
                                                 <button type="button" class="close" data-dismiss="modal">
                                                     <span>&times;</span>
                                                 </button>
@@ -129,20 +129,20 @@
 
                                             <div class="modal-body">
                                                 <div class="form-group">
-                                                    <label>Nama Peperiksaan</label>
+                                                    <label>Examination Name</label>
                                                     <input type="text" name="name" class="form-control"
                                                         value="{{ $exam->name }}" required>
                                                 </div>
 
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
-                                                        <label>Tarikh Mula Isi Markah</label>
+                                                        <label>Date Start Fill Marks</label>
                                                         <input type="datetime-local" id="start_date_{{ $exam->id }}"
                                                             name="start_date" class="form-control"
                                                             value="{{ $exam->start_date->format('Y-m-d\TH:i') }}" required>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label>Tarikh Tamat Isi Markah</label>
+                                                        <label>End Date Fill Marks</label>
                                                         <input type="datetime-local" id="end_date_{{ $exam->id }}"
                                                             name="end_date" class="form-control"
                                                             value="{{ $exam->end_date->format('Y-m-d\TH:i') }}" required>
@@ -150,11 +150,11 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label>Pilih Kelas</label>
+                                                    <label>Choose Class</label>
                                                     <input type="text" id="searchClass_{{ $exam->id }}"
                                                         class="form-control mb-2" placeholder="Cari kelas...">
                                                     <button type="button" id="selectAllBtn_{{ $exam->id }}"
-                                                        class="btn btn-sm btn-outline-primary mb-2">Pilih Semua</button>
+                                                        class="btn btn-sm btn-outline-primary mb-2">Choose All</button>
                                                     <div id="classCheckboxList_{{ $exam->id }}"
                                                         style="max-height: 200px; overflow-y: auto; border: 1px solid #ced4da; padding: 10px; border-radius: 5px;">
                                                         @foreach ($classrooms as $classroom)
@@ -173,8 +173,8 @@
 
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">Save</button>
                                             </div>
                                         </form>
                                     </div>
@@ -195,8 +195,8 @@
                                         {{-- @method('DELETE') --}}
 
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteExamModalLabel{{ $exam->id }}">Padam
-                                                Peperiksaan</h5>
+                                            <h5 class="modal-title" id="deleteExamModalLabel{{ $exam->id }}">Delete
+                                                Examination</h5>
                                             <button type="button" class="close" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -204,14 +204,14 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <p class="text-center">Adakah anda pasti untuk memadam peperiksaan ini?</p>
+                                            <p class="text-center">Are you sure to delete the examination?</p>
                                             <p class="text-center"><strong>{{ $exam->name }}</strong></p>
                                         </div>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-danger">Padam</button>
+                                                data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
                                         </div>
                                     </form>
                                 </div>
@@ -240,7 +240,7 @@
                 <form id="addExamForm" action="{{ route('admin.exams.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Peperiksaan</h5>
+                        <h5 class="modal-title">AAdd Examination</h5>
                         <button type="button" class="close" data-dismiss="modal">
                             <span>&times;</span>
                         </button>
@@ -248,30 +248,30 @@
 
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Nama Peperiksaan</label>
+                            <label>Examination Namen</label>
                             <input type="text" name="name" class="form-control"
                                 placeholder="Masukkan Nama Peperiksaan" required>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label>Tarikh Mula Isi Markah</label>
+                                <label>Start Date Fill Marks</label>
                                 <input type="datetime-local" id="add_start_date" name="start_date" class="form-control"
                                     required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Tarikh Tamat Isi Markah</label>
+                                <label>End Date Fill Marks</label>
                                 <input type="datetime-local" id="add_end_date" name="end_date" class="form-control"
                                     required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Pilih Kelas</label>
+                            <label>Choose Classs</label>
                             <input type="text" id="add_searchClass" class="form-control mb-2"
                                 placeholder="Cari kelas...">
                             <button type="button" id="add_selectAllBtn"
-                                class="btn btn-sm btn-outline-primary mb-2">Pilih Semua</button>
+                                class="btn btn-sm btn-outline-primary mb-2">Choose All</button>
                             <div id="add_classCheckboxList"
                                 style="max-height: 200px; overflow-y: auto; border: 1px solid #ced4da; padding: 10px; border-radius: 5px;">
                                 @foreach ($classrooms as $classroom)
@@ -286,8 +286,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah Peperiksaan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Examination</button>
                     </div>
                 </form>
             </div>
@@ -364,15 +364,15 @@
                         e.preventDefault();
                         Swal.fire({
                             icon: 'warning',
-                            title: 'Tarikh Tidak Sah!',
-                            text: 'Tarikh Tamat tidak boleh sebelum Tarikh Mula.'
+                            title: 'End Date is Invalid!',
+                            text: 'End Date must be greater than Start Date.'
                         });
                     } else if (!Array.from(checkboxes).some(cb => cb.checked)) {
                         e.preventDefault();
                         Swal.fire({
                             icon: 'warning',
-                            title: 'Tiada Kelas Dipilih!',
-                            text: 'Sila pilih sekurang-kurangnya satu kelas.'
+                            title: 'No Class Selected!',
+                            text: 'Please select at least one class.'
                         });
                     }
                 });
@@ -382,7 +382,7 @@
                     selectAllBtn.addEventListener('click', function() {
                         const allChecked = Array.from(checkboxes).every(cb => cb.checked);
                         checkboxes.forEach(cb => cb.checked = !allChecked);
-                        this.textContent = allChecked ? 'Pilih Semua' : 'Nyah Pilih Semua';
+                        this.textContent = allChecked ? 'Select All' : 'Unselect All';
                     });
                 }
 

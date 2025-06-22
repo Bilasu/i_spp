@@ -48,11 +48,11 @@ class TeacherExaminationController extends Controller
             ->exists();
 
         if (!$isTeacherOfClass) {
-            abort(403, 'Anda tidak dibenarkan akses kelas ini.');
+            abort(403, 'You are not authorized to access this classroom.');
         }
 
         $today = Carbon::now();
-        $canFill = $today->between(Carbon::parse($exam->start_date), Carbon::parse($exam->end_date));
+        $canFill = $today->between(Carbon::parse($exam->start_date), Carbon::parse($exam->end_date));  // Periksa jika tarikh semasa dalam julat
 
         // Ambil semua pelajar dalam kelas ini
         $students = DB::table('classroom_user')
@@ -61,21 +61,25 @@ class TeacherExaminationController extends Controller
             ->join('users', 'users.ic', '=', 'classroom_user.user_ic')
             ->select('users.ic', 'users.name')
             ->get();
-
-        // Ambil markah yang sudah ada
+        //dd($students);
+        // Ambil markah yang sudah ada untuk exam ini dan kelas ini
         $marks = ExamMark::where('exam_id', $exam->id)
             ->where('classroom_id', $classroom->id)
             ->get()
-            ->keyBy('student_ic');
+            ->keyBy('student_ic');  // keyBy untuk memudahkan pencarian markah berdasarkan IC pelajar
+        //dd($marks);
+
 
         // dd([
-        //     'hari_ini' => $today,
+        //     'today' => $today,
         //     'start_date' => $exam->start_date,
         //     'end_date' => $exam->end_date,
-        //     'boleh_isi' => $canFill
+        //     'canFill' => $canFill,
         // ]);
+
         return view('teacher.exams.fillmarks', compact('exam', 'classroom', 'students', 'marks', 'canFill'));
     }
+
     // Simpan markah pelajar (update atau insert)
     public function storeMarks(Request $request, Exam $exam, Classroom $classroom)
     {
@@ -89,14 +93,14 @@ class TeacherExaminationController extends Controller
             ->exists();
 
         if (!$isTeacherOfClass) {
-            abort(403, 'Anda tidak dibenarkan akses kelas ini.');
+            abort(403, 'You are not authorized to access this classroom.');
         }
 
         // Semak tarikh valid
         $today = Carbon::now();
         if ($today->lt(Carbon::parse($exam->start_date)) || $today->gt(Carbon::parse($exam->end_date))) {
             return redirect()->route('teacher.exams.index')
-                ->with('error', 'Anda tidak dibenarkan isi markah pada waktu ini.');
+                ->with('error', 'You are not eligible to fill marks for this exam.');
         }
 
         // Validate input marks array: expect student_ic => mark
@@ -117,6 +121,6 @@ class TeacherExaminationController extends Controller
         }
 
         return redirect()->route('teacher.exams.index', [$exam->id, $classroom->id])
-            ->with('success', 'Markah berjaya disimpan.');
+            ->with('success', 'Mark has been saved.');
     }
 }

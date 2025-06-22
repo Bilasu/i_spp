@@ -56,6 +56,7 @@ class SubjectiveQuestionController extends Controller
         // Validate input
         $request->validate([
             'question' => 'required|string',
+            'mark_total' => 'required|numeric|min:5, max:100',
             'quiz_category_id' => 'required|exists:quiz_categories,id',
         ]);
 
@@ -71,6 +72,7 @@ class SubjectiveQuestionController extends Controller
         // Simpan soalan subjektif
         SubjectiveQuestion::create([
             'question' => $request->question,
+            'mark_total' => $request->mark_total,
             'quiz_category_id' => $request->quiz_category_id,
             'created_by' => $user->ic,
         ]);
@@ -91,6 +93,7 @@ class SubjectiveQuestionController extends Controller
         // Validate input
         $request->validate([
             'question' => 'required|string',
+            'mark_total' => 'required|numeric|min:5, max:100',
             'quiz_category_id' => 'required|exists:quiz_categories,id',
         ]);
 
@@ -100,6 +103,7 @@ class SubjectiveQuestionController extends Controller
         // Check if there's no change in the question
         if (
             $question->question === $request->question &&
+            $question->mark_total === $request->mark_total &&
             $question->quiz_category_id == $request->quiz_category_id
         ) {
             return back()->with(['error' => 'Please make some changes before submitting.']);
@@ -108,6 +112,7 @@ class SubjectiveQuestionController extends Controller
         // Update the question if there are changes
         $question->update([
             'question' => $request->question,
+            'mark_total' => $request->mark_total,
             'quiz_category_id' => $request->quiz_category_id,
         ]);
 
@@ -145,12 +150,12 @@ class SubjectiveQuestionController extends Controller
         // Redirect ikut guard / role
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.subjective.read', ['quiz_category_id' => $categoryId])
-                ->with('success', 'Soalan berjaya dipadam.');
+                ->with('success', 'Question deleted successfully.');
         }
 
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.subjective.read', ['quiz_category_id' => $categoryId])
-                ->with('success', 'Soalan berjaya dipadam.');
+                ->with('success', 'Question deleted successfully.');
         }
 
         abort(403, 'Unauthorized access.');
@@ -217,6 +222,7 @@ class SubjectiveQuestionController extends Controller
         $adminIc = Auth::guard('admin')->user()->ic;
         // Soalan yang diminta
         $question = SubjectiveQuestion::with('answers.student')->findOrFail($questionId);
+
 
         // Pastikan soalan tersebut betul-betul milik cikgu
         if ($question->created_by === $adminIc) {

@@ -11,7 +11,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Senarai Penghantaran Tugasan: {{ $assignment->classroom->class_name }}</h1>
+                        <h1>List of Submitted Assignments: {{ $assignment->classroom->class_name }}</h1>
 
                     </div>
                     <div class="col-sm-6">
@@ -19,7 +19,7 @@
                             <li class="breadcrumb-item"><a href="{{ route('teacher.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('teacher.classrooms.index') }}">Back</a></li>
 
-                            <li class="breadcrumb-item active">Senarai Penghantaran Tugasan: {{ $assignment->title }}</li>
+                            <li class="breadcrumb-item active">List of Submitted Assignments: {{ $assignment->title }}</li>
                         </ol>
                     </div>
                 </div>
@@ -50,14 +50,14 @@
                 <div class="table-responsive mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="mb-4">Senarai Penghantaran Tugasan: {{ $assignment->title }}</h4>
-                            <table class="table table-bordered table-hover">
+                            <h4 class="mb-4">List of Submitted Assignments: {{ $assignment->title }}</h4>
+                            <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th>Nama Pelajar</th>
-                                        <th>Fail</th>
-                                        <th>Tarikh & Masa Hantar</th>
-                                        <th>Komen Pelajar</th>
+                                        <th>Student Namer</th>
+                                        <th>File</th>
+                                        <th>Date and Time Submitted</th>
+                                        <th>Student Comment</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,8 +73,8 @@
                                             <tr>
                                                 <td>{{ $student->name }}</td>
                                                 <td>
-                                                    <a
-                                                        href="{{ route('teacher.submission.download', $submission->file_path) }}">
+                                                    <a href="{{ asset('storage/uploads/' . $submission->file_path) }}"
+                                                        download title="{{ basename($submission->file_path) }}">
                                                         {{ basename($submission->file_path) }}
                                                     </a>
                                                 </td>
@@ -98,11 +98,19 @@
                                         @if (!$submission)
                                             <tr>
                                                 <td>{{ $student->name }}</td>
-                                                <td colspan="3">Belum menghantar tugasan.</td>
+                                                <td colspan="3">Not submitted</td>
                                             </tr>
                                         @endif
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Student Namer</th>
+                                        <th>File</th>
+                                        <th>Date and Time Submitted</th>
+                                        <th>Student Comment</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -143,7 +151,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search class..."
+                    searchPlaceholder: "🔍 Search student..."
                 }
             });
 

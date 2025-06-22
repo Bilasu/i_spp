@@ -87,27 +87,27 @@
                                             <div class="modal-content">
                                                 <div class="modal-header bg-info text-white">
                                                     <h5 class="modal-title" id="viewClassModalLabel{{ $classroom->id }}">
-                                                        Maklumat Kelas</h5>
+                                                        Class Details</h5>
                                                     <button type="button" class="close text-white" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <h5><strong>Nama Kelas:</strong> {{ $classroom->name }}</h5>
+                                                    <h5><strong>Class Name:</strong> {{ $classroom->name }}</h5>
                                                     <hr>
-                                                    <h6>Senarai Pelajar:</h6>
+                                                    <h6>List of Students:</h6>
                                                     <ul>
                                                         @forelse($classroom->students as $student)
                                                             <li>{{ $student->name }} ({{ $student->ic }})</li>
                                                         @empty
-                                                            <li>Tiada pelajar dalam kelas ini.</li>
+                                                            <li>No student in this class</li>
                                                         @endforelse
                                                     </ul>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Tutup</button>
+                                                        data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,7 +118,7 @@
                                 <div class="alert alert-info mt-3 d-flex align-items-center" role="alert">
                                     <i class="fas fa-info-circle me-2"></i>
                                     <div>
-                                        Tiada kelas yang dijumpai.
+                                        No class found
                                     </div>
                                 </div>
                     @endforelse

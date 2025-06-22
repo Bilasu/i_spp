@@ -12,13 +12,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Senarai Soalan Subjektif</h1>
+                        <h1>List of Subjective Questions</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.quizcategory.read') }}">Back</a></li>
-                            <li class="breadcrumb-item active">Senarai Soalan Subjektif</li>
+                            <li class="breadcrumb-item active">List of Subjective Questions</li>
                         </ol>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                             @endif
 
                             <div class="card-header">
-                                <h3 class="card-title">Soalan Subjektif yang Tersedia</h3>
+                                <h3 class="card-title">List of Subjective Questions</h3>
 
                             </div>
 
@@ -52,11 +52,13 @@
                                     data-target="#addQuestionModal">
                                     <i class="fas fa-plus"></i> Tambah Soalan
                                 </button>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Soalan</th>
-                                            <th>Review Jawapan</th>
+                                            <th>Question</th>
+                                            <th>Total Mark</th>
+                                            <th>Review Answer</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </tr>
@@ -65,6 +67,7 @@
                                         @foreach ($questions as $question)
                                             <tr>
                                                 <td>{{ $question->question }}</td>
+                                                <td>{{ $question->mark_total }}</td>
                                                 <td>
                                                     {{-- @php
                                                         $admin_ic = Auth::guard('admin')->user()->ic;
@@ -109,48 +112,50 @@
                                                 aria-labelledby="editQuestionModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        <form action="{{ route('admin.subjective.update', $question->id) }}"
+                                                        <form
+                                                            action="{{ route('admin.subjective.update', $question->id) }}"
                                                             method="POST">
                                                             @csrf
 
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="editQuestionModalLabel">Edit
-                                                                    Soalan</h5>
+                                                                    Question</h5>
                                                                 <input type="hidden" name="quiz_category_id"
                                                                     value="{{ $question->quiz_category_id }}">
-
                                                                 <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
 
+                                                            @php
+                                                                $actualQuestion = $question->question;
+                                                                $totalMark = $question->mark_total;
+                                                            @endphp
 
                                                             <div class="modal-body">
+                                                                {{-- Input soalan --}}
                                                                 <div class="form-group">
-                                                                    <label for="question">Soalan</label>
+                                                                    <label for="question">Question</label>
                                                                     <input type="text" name="question" id="question"
-                                                                        class="form-control"
-                                                                        value="{{ $question->question }}">
+                                                                        class="form-control" value="{{ $actualQuestion }}"
+                                                                        required>
                                                                 </div>
-                                                                {{-- <div class="form-group">
-                                                                    <label for="quiz_category_id">Kategori</label>
-                                                                    <select name="quiz_category_id" id="quiz_category_id"
-                                                                        class="form-control">
-                                                                        @foreach ($categories as $category)
-                                                                            <option value="{{ $category->id }}"
-                                                                                {{ $category->id == $question->quiz_category_id ? 'selected' : '' }}>
-                                                                                {{ $category->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div> --}}
+
+                                                                {{-- Input markah penuh --}}
+                                                                <div class="form-group">
+                                                                    <label for="mark_total">Full Mark</label>
+                                                                    <input type="number" name="mark_total" id="mark_total"
+                                                                        class="form-control" value="{{ $totalMark }}"
+                                                                        min="1" max="100" required>
+                                                                </div>
                                                             </div>
+
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Cancel</button>
+                                                                    data-dismiss="modal">Batal</button>
                                                                 <button type="submit" class="btn btn-primary">Update
-                                                                    Soalan</button>
+                                                                    Question</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -169,22 +174,22 @@
                                                             @csrf
                                                             {{-- @method('DELETE') --}}
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="deleteQuestionModalLabel">Padam
-                                                                    Soalan</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
+                                                                <h5 class="modal-title" id="deleteQuestionModalLabel">
+                                                                    Deleet Question</h5>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Adakah anda pasti mahu memadam soalan berikut?</p>
+                                                                <p>Are u sure to delete this question?</p>
                                                                 <p><strong>{{ $question->question }}</strong></p>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Batal</button>
-                                                                <button type="submit" class="btn btn-danger">Ya,
-                                                                    Padam</button>
+                                                                    data-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger">Yes,
+                                                                    Delete</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -206,44 +211,41 @@
                     <div class="modal-content">
                         <form action="{{ route('admin.subjective.store') }}" method="POST">
                             @csrf
-
-
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addQuestionModalLabel">Tambah Soalan Baru</h5>
+                                <h5 class="modal-title" id="addQuestionModalLabel">Add New Question</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+
                             <div class="modal-body">
+                                {{-- Kategori Soalan --}}
+                                <input type="hidden" name="quiz_category_id" value="{{ $quiz_category_id }}">
+
+                                {{-- Input Soalan --}}
                                 <div class="form-group">
-                                    <label for="question">Soalan</label>
-
-                                    {{-- <input type="hidden" name="quiz_category_id"
-                                        value="{{ $question->quiz_category_id }}"> --}}
-
-                                    <input type="hidden" name="quiz_category_id" value="{{ $quiz_category_id }}">
-
-
+                                    <label for="question">Question</label>
                                     <input type="text" name="question" id="question" class="form-control"
                                         placeholder="Masukkan soalan di sini" required>
                                 </div>
-                                {{-- <div class="form-group">
-                                    <label for="quiz_category_id">Kategori</label>
-                                    <select name="quiz_category_id" id="quiz_category_id" class="form-control" required>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div> --}}
+
+                                {{-- Input Markah Penuh --}}
+                                <div class="form-group">
+                                    <label for="mark_total">Full Mark</label>
+                                    <input type="number" name="mark_total" id="mark_total" class="form-control"
+                                        placeholder="Contoh: 10" min="1" max="100" required>
+                                </div>
                             </div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Tambah Soalan</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cnacel</button>
+                                <button type="submit" class="btn btn-primary">Add Question</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
         </section>
     </div>
 @endsection
@@ -276,7 +278,7 @@
 
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Cari soalan kuiz..."
+                    searchPlaceholder: "🔍 Findsubjective question..."
                 }
             });
 

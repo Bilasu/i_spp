@@ -12,7 +12,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 align-items-center">
                     <div class="col-sm-6">
-                        <h1 class="text-primary"><i class="fas fa-poll"></i> Semua Keputusan Kuiz (Kertas 1)</h1>
+                        <h1 class="text-primary"><i class="fas fa-poll"></i> All Results from Paper 1</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right bg-transparent">
@@ -22,7 +22,7 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ route('student.quizcategory.read') }}">Back</a>
                             </li>
-                            <li class="breadcrumb-item active">Semua Keputusan Kuiz</li>
+                            <li class="breadcrumb-item active">All Quiz Results </li>
                         </ol>
                     </div>
                 </div>
@@ -38,14 +38,15 @@
                         </div>
                         <div class="card-body p-3">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover text-center mb-0">
+                                <table class="table table-bordered table-hover text-center mb-0"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Tarikh</th>
-                                            <th>✅ Betul</th>
-                                            <th>❌ Salah</th>
-                                            <th>📋 Jumlah</th>
-                                            <th>📈 Skor (%)</th>
+                                            <th>Date</th>
+                                            <th>✅ Correct</th>
+                                            <th>❌ Wrong</th>
+                                            <th>📋 Total Questions</th>
+                                            <th>📈 Overall Score (%)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,7 +105,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search notetypes..."
+                    searchPlaceholder: "🔍 Search quiz..."
                 }
             });
 

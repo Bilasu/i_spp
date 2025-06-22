@@ -35,7 +35,7 @@
                         <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>{{ $totalStudents }}</h3>
-                                <p>Jumlah Pelajar</p>
+                                <p>Total Student </p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-user-graduate"></i>
@@ -48,7 +48,7 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $totalTeachers }}</h3>
-                                <p>Jumlah Guru</p>
+                                <p>Total Teacher</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-chalkboard-teacher"></i>
@@ -61,7 +61,7 @@
                         <div class="small-box bg-warning">
                             <div class="inner">
                                 <h3>{{ $totalClasses }}</h3>
-                                <p>Jumlah Kelas</p>
+                                <p>Total Class</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-school"></i>
@@ -87,7 +87,7 @@
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <h3>{{ $totalMarkahDiisi }}</h3>
-                                <p>Jumlah Markah Diisi</p>
+                                <p>Total Mark Filled</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-check-circle"></i>
@@ -99,7 +99,7 @@
                 <!-- Bar Chart Gred -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h3 class="card-title">Bilangan Gred Setiap Peperiksaan</h3>
+                        <h3 class="card-title">Total of Examination</h3>
                     </div>
                     <div class="card-body">
                         <div id="barChartGredContainer">
@@ -111,7 +111,7 @@
                 <!-- Line Chart Purata -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Purata Markah Setiap Kelas Mengikut Peperiksaan</h3>
+                        <h3 class="card-title">Average Examination Marks By CLasroom</h3>
                     </div>
                     <div class="card-body">
                         <div id="lineGraphPurataContainer">

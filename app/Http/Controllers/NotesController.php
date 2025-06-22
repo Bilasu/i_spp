@@ -6,6 +6,7 @@ use App\Models\Notes;
 use App\Models\Notetypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Str;
 
@@ -46,28 +47,26 @@ class NotesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'name' => 'required',
             'desc' => 'required',
             'file' => 'required|mimes:pdf,xls,xlsx,ppt,pptx|max:20480',
             'notetypes_id' => 'required',
         ]);
 
         $data = new Notes();
-        // $data->name = $request->name;
         $data->desc = $request->desc;
         $data->notetypes_id = $request->notetypes_id;
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $originalFilename = $file->getClientOriginalName(); // Simpan nama fail asal
-            $file->move(public_path('uploads'), $originalFilename); // Simpan dengan nama asal
-            $data->file = $originalFilename; // Simpan dalam database dengan nama asal
-            // $filename = time() . '.' . $file->getClientOriginalExtension();
-            // $file->move(public_path('uploads'), $filename);
-            // $data->file = $filename;
+            $originalFilename = $file->getClientOriginalName();
 
-            // // Paparkan nama fail asal
-            // echo "Nama fail yang diupload: " . $originalFilename;
+            // Buat folder jika belum ada
+            if (!Storage::disk('public')->exists('uploads')) {
+                Storage::disk('public')->makeDirectory('uploads');
+            }
+
+            Storage::disk('public')->putFileAs('uploads', $file, $originalFilename);
+            $data->file = $originalFilename;
         }
 
         $data->save();
@@ -78,6 +77,7 @@ class NotesController extends Controller
             return redirect()->route('teacher.notes.read')->with('success', 'New Note Added Successfully');
         }
     }
+
 
 
 
@@ -140,11 +140,19 @@ class NotesController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-            $notes->file = $filename;
-        }
+            $originalFilename = $file->getClientOriginalName();
 
+            // Pastikan folder wujud
+            if (!Storage::disk('public')->exists('uploads')) {
+                Storage::disk('public')->makeDirectory('uploads');
+            }
+
+            // Simpan fail
+            Storage::disk('public')->putFileAs('uploads', $file, $originalFilename);
+
+            // Simpan nama fail dalam database
+            $notes->file = $originalFilename;
+        }
         $notes->save();
 
         if (Auth::guard('admin')->check()) {

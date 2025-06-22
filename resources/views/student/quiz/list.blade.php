@@ -37,7 +37,7 @@
                                 <!-- Header Info -->
                                 <div class="mb-4">
                                     <h4 class="fw-bold text-primary mb-2">
-                                        <i class="fas fa-trophy me-2"></i> Kategori Kuiz:
+                                        <i class="fas fa-trophy me-2"></i> Quiz Category:
                                         <span
                                             class="text-dark">{{ $quiz_category->name ?? 'Kategori tidak ditemui' }}</span>
                                     </h4>
@@ -53,14 +53,14 @@
                                     @endif
 
                                     <small class="text-muted">
-                                        Soalan {{ ($currentIndex ?? 0) + 1 }} daripada {{ $totalQuestions ?? '?' }}
+                                        Question {{ ($currentIndex ?? 0) + 1 }} over {{ $totalQuestions ?? '?' }}
                                     </small>
                                 </div>
 
 
                                 @if (isset($no_questions) && $no_questions)
                                     <div class="text-center py-5">
-                                        <h5 class="text-muted">Tiada soalan tersedia untuk kategori ini.</h5>
+                                        <h5 class="text-muted">No question for this category</h5>
                                     </div>
                                 @else
                                     @if (isset($question) && is_object($question))
@@ -96,7 +96,7 @@
                                                 @if (($currentIndex ?? 0) > 0)
                                                     <a href="{{ route('student.quiz.back', ['index' => $currentIndex - 1]) }}"
                                                         class="btn btn-outline-secondary rounded-pill px-4">
-                                                        <i class="fas fa-arrow-left me-1"></i> Kembali
+                                                        <i class="fas fa-arrow-left me-1"></i> Back
                                                     </a>
                                                 @else
                                                     <div></div>
@@ -108,7 +108,7 @@
                                             </div>
                                         </form>
                                     @else
-                                        <h5 class="text-center text-danger">Soalan tidak dijumpai.</h5>
+                                        <h5 class="text-center text-danger">No question found</h5>
                                     @endif
                                 @endif
 
@@ -150,7 +150,7 @@
                 dom: '<"d-flex justify-content-between align-items-center mb-2"Bf>rtip',
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search notetypes..."
+                    searchPlaceholder: "🔍 Search quiz..."
                 }
             });
 

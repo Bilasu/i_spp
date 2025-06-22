@@ -122,15 +122,15 @@
                                                 <td>
                                                     <a href="{{ route('admin.quiz.read', $item->id) }}"
                                                         class="btn btn-outline-primary btn-sm rounded-pill">
-                                                        📄 Kertas 1
+                                                        📄 Paper 1
                                                     </a>
                                                     <a href="{{ route('admin.subjective.read', $item->id) }}"
                                                         class="btn btn-outline-success btn-sm rounded-pill">
-                                                        ✍️ Kertas 2
+                                                        ✍️ Paper 2
                                                     </a>
                                                     <a href="{{ route('admin.essay.read', $item->id) }}"
                                                         class="btn btn-outline-warning btn-sm rounded-pill">
-                                                        📝 Kertas 3
+                                                        📝 Paper 3
                                                     </a>
                                                 </td>
                                                 <td>

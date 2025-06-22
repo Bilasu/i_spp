@@ -38,7 +38,7 @@
                         <div class="small-box bg-info">
                             <div class="inner">
                                 <h3>{{ $totalAssignments }}</h3>
-                                <p>Jumlah Tugasan</p>
+                                <p>Total Assignment</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-tasks"></i>
@@ -50,7 +50,7 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>{{ $totalSubmitted }}</h3>
-                                <p>Tugasan Dihantar</p>
+                                <p>Submitted Assignment</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-upload"></i>
@@ -62,7 +62,7 @@
                         <div class="small-box bg-warning">
                             <div class="inner">
                                 <h3>{{ $ongoingAssignments }}</h3>
-                                <p>Tugasan Aktif</p>
+                                <p>Active Assignment</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-clock"></i>
@@ -74,7 +74,7 @@
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <h3>{{ $quizAttempted }}</h3>
-                                <p>Kuiz Dijawab</p>
+                                <p>Answered Quiz</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-check-circle"></i>
@@ -86,7 +86,7 @@
                 {{-- Card untuk carta markah --}}
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Carta Markah Peperiksaan</h3>
+                        <h3 class="card-title">Graph of Exam Marks</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="examChart" height="100"></canvas>

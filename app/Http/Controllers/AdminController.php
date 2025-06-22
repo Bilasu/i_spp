@@ -180,7 +180,6 @@ class AdminController extends Controller
             ->where('ic', $request->ic)
             ->first();
 
-        // Gantikan Hash::check dengan perbandingan langsung
         if (!$record || $request->token !== $record->token) {
             return back()->withErrors(['token' => 'Invalid or expired token.']);
         }
@@ -188,16 +187,21 @@ class AdminController extends Controller
         // Get the user
         $user = User::where('ic', $request->ic)->first();
 
-        // Safely hash new password and save
+        // ✅ Tambah semakan kalau password baru sama dengan password lama
+        if (Hash::check($request->password, $user->password)) {
+            return back()->with('info', 'New password is the same as the old password. Please choose a different password.');
+        }
+
+        // Hash and save new password
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // Delete the token after reset
+        // Delete token
         DB::table('password_reset_tokens')->where('ic', $request->ic)->delete();
 
-        // Redirect to login
         return redirect()->route('admin.login')->with('success', 'Password has been reset!');
     }
+
 
 
 

@@ -88,7 +88,8 @@
                                         <div id="customButtons" class="btn-group float-sm-right"></div>
                                     </div>
                                 </div>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -106,8 +107,14 @@
                                         @foreach ($notes as $item)
                                             <tr>
 
-                                                <td><a href="{{ asset('uploads/' . $item->file) }}"
-                                                        download>{{ $item->file }}</a></td>
+                                                <td
+                                                    style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    <a href="{{ asset('storage/uploads/' . $item->file) }}" target="_blank"
+                                                        download title="{{ $item->file }}">
+                                                        {{ $item->file }}
+                                                    </a>
+                                                </td>
+
                                                 <td>{{ $item->desc }}</td>
                                                 {{-- <td>{{ $item->file }}</td> --}}
                                                 <td>{{ $item->Notetypes->name }}</td>
@@ -281,7 +288,7 @@
                                                                 <p class="text-center">Are you sure you want to delete this
                                                                     note type?</p>
                                                                 <p class="text-center">
-                                                                    <strong>{{ $item->name }}</strong>
+                                                                    <strong>{{ $item->file }}</strong>
                                                                 </p>
                                                             </div>
 

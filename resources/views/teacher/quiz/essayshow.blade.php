@@ -12,10 +12,10 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Senarai Soalan Essay</h1>
+                        <h1>List of Essay Question</h1>
                     </div>
                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
+                        <ol class="breadcrumb  float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('teacher.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item">
                                 <a
@@ -23,7 +23,7 @@
                             </li>
 
 
-                            <li class="breadcrumb-item active">Senarai Soalan Essay</li>
+                            <li class="breadcrumb-item active">List of Essay Question</li>
                         </ol>
                     </div>
                 </div>
@@ -50,31 +50,44 @@
                             {{-- Paparkan Soalan --}}
                             <div class="card mb-4">
                                 <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0">Soalan: {{ $question->question }}</h5>
+                                    @php
+                                        $actualQuestion = $question->question;
+                                        $markTotal = $question->mark_total ?? '—';
+                                    @endphp
+
+                                    <h5 class="mb-0">
+                                        Question: {{ $actualQuestion }}
+                                    </h5>
                                 </div>
 
                                 <div class="card-body">
                                     @forelse($question->answers as $answer)
                                         <div class="border rounded p-3 mb-4">
-                                            <p><strong>Pelajar:</strong> {{ $answer->student->name }}</p>
-                                            <p><strong>Jawapan:</strong> {{ $answer->answer }}</p>
+                                            <p><strong>Student:</strong> {{ $answer->student->name }}</p>
+                                            <p><strong>Answer:</strong> {{ $answer->answer }}</p>
 
                                             @if ($isOwner)
                                                 @if ($answer->mark !== null && $answer->comment)
                                                     <div class="alert alert-success">
-                                                        <p><strong>Markah:</strong> {{ $answer->mark }}</p>
-                                                        <p><strong>Komen:</strong> {{ $answer->comment }}</p>
+                                                        <p><strong>Mark:</strong> {{ $answer->mark }} /
+                                                            {{ $question->mark_total }}</p>
+                                                        <p><strong>Comment:</strong> {{ $answer->comment }}</p>
                                                     </div>
                                                 @else
                                                     <form action="{{ route('teacher.essay.mark', $answer->id) }}"
                                                         method="POST">
                                                         @csrf
+
+                                                        <input type="hidden" name="mark_total"
+                                                            value="{{ $question->mark_total }}">
+
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <label>Markah Dapat:</label>
+                                                                <label>Mark Obtained:</label>
                                                                 <input type="number" name="mark_obtained"
                                                                     class="form-control @error('mark_obtained') is-invalid @enderror"
-                                                                    value="{{ old('mark_obtained') }}" min="0"
+                                                                    value="{{ old('mark_obtained', $answer->mark) }}"
+                                                                    min="0" max="{{ $question->mark_total }}"
                                                                     required>
                                                                 @error('mark_obtained')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -82,34 +95,38 @@
                                                             </div>
 
                                                             <div class="col-md-6">
-                                                                <label>Markah Penuh:</label>
-                                                                <input type="number" name="mark_total"
-                                                                    class="form-control @error('mark_total') is-invalid @enderror"
-                                                                    value="{{ old('mark_total', 50) }}" min="1"
-                                                                    required>
-                                                                @error('mark_total')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                @enderror
+                                                                <label>Full Mark:</label>
+                                                                <input type="number" class="form-control"
+                                                                    value="{{ $question->mark_total }}" disabled>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label>Komen:</label>
+
+                                                        <div class="form-group mt-3">
+                                                            <label>Comment:</label>
                                                             <input type="text" name="comments" class="form-control"
                                                                 value="{{ old('comments', $answer->comment) }}">
                                                         </div>
-                                                        <button type="submit" class="btn btn-sm btn-success">💾 Simpan
-                                                            Markah & Komen</button>
+
+                                                        <button type="submit" class="btn btn-sm btn-success mt-2">
+                                                            💾 Save Comment and Mark
+                                                        </button>
                                                     </form>
                                                 @endif
                                             @else
                                                 <div class="alert alert-secondary">
-                                                    <p><strong>Markah:</strong> {{ $answer->mark ?? 'Belum diberi' }}</p>
-                                                    <p><strong>Komen:</strong> {{ $answer->comment ?? 'Tiada komen' }}</p>
+                                                    @if ($answer->mark !== null)
+                                                        <p><strong>Mark:</strong> {{ $answer->mark }} /
+                                                            {{ $question->mark_total }}</p>
+                                                    @else
+                                                        <p><strong>Mark:</strong> Not graded</p>
+                                                    @endif
+                                                    <p><strong>Comment:</strong> {{ $answer->comment ?? 'Tiada komen' }}
+                                                    </p>
                                                 </div>
                                             @endif
                                         </div>
                                     @empty
-                                        <div class="alert alert-info">Tiada jawapan untuk soalan ini.</div>
+                                        <div class="alert alert-info">No answer for this question.</div>
                                     @endforelse
                                 </div>
                             </div>
@@ -155,7 +172,7 @@
 
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Cari soalan kuiz..."
+                    searchPlaceholder: "🔍 Find student..."
                 }
             });
 

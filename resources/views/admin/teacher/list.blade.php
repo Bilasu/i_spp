@@ -101,7 +101,8 @@
                                         <div id="customButtons" class="btn-group float-sm-right"></div>
                                     </div>
                                 </div>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -263,13 +264,7 @@
                             @csrf
                             <div class="modal-header">
                                 <div style="flex-grow: 1;">
-                                    <h3>Important Note</h3>
-                                    <p class="text-muted">
-                                        If you enter the wrong email address during the initial registration,
-                                        you will need to register again with a new user account. The email address can only
-                                        be
-                                        validated the first time for a successful login registration.
-                                    </p>
+
                                 </div>
 
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

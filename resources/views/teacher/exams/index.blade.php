@@ -45,93 +45,82 @@
 
                 <div class="table-responsive mb-4">
                     {{-- Start of each exam --}}
-
                     @foreach ($exams as $exam)
                         <div class="card mb-4 p-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-body"
-                                        style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; border-bottom: 2px solid #dee2e6;">
-                                        <h3 class="mb-3" style="color: #2c3e50; font-weight: bold;">
-                                            📄 {{ $exam->name }}
-                                        </h3>
+                            <div class="card-body"
+                                style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; border-bottom: 2px solid #dee2e6;">
+                                <h3 class="mb-3" style="color: #2c3e50; font-weight: bold;">
+                                    📄 {{ $exam->name }}
+                                </h3>
 
-                                        <p style="font-size: 16px; color: #555;">
-                                            <strong>🗓️ Tempoh Isi Markah:</strong><br>
-                                            {{ \Carbon\Carbon::parse($exam->start_date)->format('d/m/Y') }}
-                                            <span style="margin: 0 8px;">hingga</span>
-                                            {{ \Carbon\Carbon::parse($exam->end_date)->format('d/m/Y') }}
-                                        </p>
+                                <p style="font-size: 16px; color: #555;">
+                                    <strong>🗓️ Remaining Time To Fillmarks:</strong><br>
+                                    {{ \Carbon\Carbon::parse($exam->start_date)->format('d/m/Y') }}
+                                    <span style="margin: 0 8px;">until</span>
+                                    {{ \Carbon\Carbon::parse($exam->end_date)->format('d/m/Y') }}
+                                </p>
 
-
-                                        @if ($exam->classrooms->count() > 0)
-                                            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Kelas</th>
-                                                        <th>Overall Status</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($exam->classrooms as $classroom)
-                                                        @php
-                                                            // Total students in the class
-                                                            $students = $classroom->students;
-
-                                                            // Total students in the class
-                                                            $totalStudents = $students->count();
-
-                                                            // Students who have marks for this exam
-                                                            $markedStudents = $exam
-                                                                ->examMarks()
-                                                                ->where('classroom_id', $classroom->id)
-                                                                ->whereIn('student_ic', $students->pluck('ic'))
-                                                                ->count();
-
-                                                            // Status message
-                                                            $status =
-                                                                $totalStudents == 0
-                                                                    ? 'Tiada pelajar'
-                                                                    : ($markedStudents >= $totalStudents
-                                                                        ? 'Lengkap – ' .
-                                                                            $markedStudents .
-                                                                            '/' .
-                                                                            $totalStudents
-                                                                        : 'Belum Lengkap – ' .
-                                                                            $markedStudents .
-                                                                            '/' .
-                                                                            $totalStudents);
-                                                        @endphp
-                                                        <tr>
-                                                            <td>{{ $classroom->class_name }}</td>
-                                                            <td>{{ $status }}</td>
-                                                            <td>
-                                                                <a
-                                                                    href="{{ route('teacher.exams.fillmarks', ['exam' => $exam->id, 'classroom' => $classroom->id]) }}">
-                                                                    Fill Marks
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        @else
-                                            <p>Tiada kelas untuk peperiksaan ini.</p>
-                                        @endif
-
-
-
-                                    </div>
+                                @if ($exam->classrooms->count() > 0)
+                                    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Overall Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($exam->classrooms as $classroom)
+                                                @php
+                                                    // Total students in the class
+                                                    $students = $classroom->students;
+                                                    // Total students in the class
+                                                    $totalStudents = $students->count();
+                                                    // Students who have marks for this exam
+                                                    $markedStudents = $exam
+                                                        ->examMarks()
+                                                        ->where('classroom_id', $classroom->id)
+                                                        ->whereIn('student_ic', $students->pluck('ic'))
+                                                        ->count();
+                                                    // Status message
+                                                    $status =
+                                                        $totalStudents == 0
+                                                            ? 'No student in this class'
+                                                            : ($markedStudents >= $totalStudents
+                                                                ? 'Completed – ' .
+                                                                    $markedStudents .
+                                                                    '/' .
+                                                                    $totalStudents
+                                                                : 'In progress – ' .
+                                                                    $markedStudents .
+                                                                    '/' .
+                                                                    $totalStudents);
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $classroom->class_name }}</td>
+                                                    <td>{{ $status }}</td>
+                                                    <td>
+                                                        <a
+                                                            href="{{ route('teacher.exams.fillmarks', ['exam' => $exam->id, 'classroom' => $classroom->id]) }}">
+                                                            Fill Marks
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <p>No class for this exam</p>
+                                @endif
+                            </div> <!-- End of card-body -->
+                        </div> <!-- End of card for each exam -->
                     @endforeach
                 </div>
             </div>
-    </div>
-    </div>
-    </div>
-    </section>
+        </section>
     </div>
 @endsection
+
 
 
 

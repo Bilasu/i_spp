@@ -115,23 +115,23 @@
 
                                                 <td>
                                                     <a href="{{ route('student.quiz.allResults') }}"
-                                                        class="btn btn-primary">Kertas 1</a>
+                                                        class="btn btn-primary">Paper 1</a>
 
                                                     <a href="{{ route('student.subjective.viewAnswer', $item->id) }}"
-                                                        class="btn btn-success">Kertas 2</a>
+                                                        class="btn btn-success">Paper 2</a>
 
                                                     <a href="{{ route('student.essay.viewAnswer', $item->id) }}"
-                                                        class="btn btn-warning text-dark">Kertas 3</a>
+                                                        class="btn btn-warning text-dark">Paper 3</a>
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('student.quiz.startquiz', $item->id) }}"
-                                                        class="btn btn-primary"> Kertas 1</a>
+                                                        class="btn btn-primary"> Paper 1</a>
 
                                                     <a href="{{ route('student.subjective.form', $item->id) }}"
-                                                        class="btn btn-success"> Kertas 2</a>
+                                                        class="btn btn-success"> Paper 2</a>
 
                                                     <a href="{{ route('student.essay.form', $item->id) }}"
-                                                        class="btn btn-warning text-dark"> Kertas 3</a>
+                                                        class="btn btn-warning text-dark"> Paper 3</a>
                                                     {{-- <td><a href="" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editCategoryQuizModal{{ $item->id }}">Edit</a>
                                                 </td> --}}

@@ -60,11 +60,11 @@ class QuestionController extends Controller
 
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.quiz.read', $request->quiz_category_id)
-                ->with('success', 'Soalan berjaya ditambah.');
+                ->with('success', 'Objective Question added successfully.');
         }
 
         return redirect()->route('admin.quiz.read', $request->quiz_category_id)
-            ->with('success', 'Soalan berjaya ditambah.');
+            ->with('success', 'Objective Question added successfully.');
     }
 
     // public function showByCategory($id)
@@ -129,11 +129,11 @@ class QuestionController extends Controller
         // Redirect ikut role
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.quiz.read', $question->quiz_category_id)
-                ->with('success', 'Soalan berjaya dikemaskini.');
+                ->with('success', 'Objective Question updated successfully.');
         }
 
         return redirect()->route('admin.quiz.read', $question->quiz_category_id)
-            ->with('success', 'Question updated successfully.');
+            ->with('success', 'Objective  Question updated successfully.');
     }
 
     public function delete($id)
@@ -145,7 +145,7 @@ class QuestionController extends Controller
         // Redirect ikut role
         if (Auth::guard('teacher')->check()) {
             return redirect()->route('teacher.quiz.read', $categoryId)
-                ->with('success', 'Soalan berjaya dipadam.');
+                ->with('success', 'Question deleted successfully.');
         }
 
         return redirect()->route('admin.quiz.read', $categoryId)
@@ -252,15 +252,21 @@ class QuestionController extends Controller
             ->where('quiz_category_id', $quiz_id)
             ->get();
 
-        // Check role via guard (assuming separate guards for admin & teacher)
+        // Dapatkan semua kelas yang ada dalam quiz result
+        $classList = $quizResults->pluck('user.classrooms')
+            ->flatten()
+            ->unique('id')
+            ->sortBy('class_name');
+
         if (Auth::guard('admin')->check()) {
-            return view('admin.quiz.quizresults', compact('quizResults'));
+            return view('admin.quiz.quizresults', compact('quizResults', 'classList'));
         } elseif (Auth::guard('teacher')->check()) {
-            return view('teacher.quiz.quizresults', compact('quizResults'));
+            return view('teacher.quiz.quizresults', compact('quizResults', 'classList'));
         } else {
             abort(403, 'Unauthorized');
         }
     }
+
 
     public function allResults()
     {

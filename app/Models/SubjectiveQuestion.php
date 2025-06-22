@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubjectiveQuestion extends Model
 {
-    protected $fillable = ['question', 'quiz_category_id', 'created_by'];
+    protected $fillable = ['question', 'quiz_category_id', 'created_by', 'mark_total'];
     public function answers()
     {
         return $this->hasMany(SubjectiveAnswer::class, 'subjective_question_id');

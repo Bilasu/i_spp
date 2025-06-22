@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>List of Question</h1>
+                        <h1>List of Question </h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.quizcategory.read') }}">Back</a></li>
-                            <li class="breadcrumb-item active">Question List</li>
+                            <li class="breadcrumb-item active">List of Question </li>
                         </ol>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                                 </div>
                             @endif
                             <div class="card-header">
-                                <h3 class="card-title">List of Question</h3>
+                                <h3 class="card-title">List of Question </h3>
                                 {{-- <form action="">
                                     <div class="col-md-4">
                                         <select name="class_id" id="" class="form-control">
@@ -96,7 +96,8 @@
                                         <div id="customButtons" class="btn-group float-sm-right"></div>
                                     </div>
                                 </div>
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -106,7 +107,7 @@
                                             <th>Answer C</th>
                                             <th>Answer D</th>
                                             <th>True Answer</th>
-                                            <th>Category</th>
+                                            <th>Question Category</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </tr>
@@ -328,7 +329,7 @@
                                             <th>Answer C</th>
                                             <th>Answer D</th>
                                             <th>True Answer</th>
-                                            <th>Category</th>
+                                            <th>Question Category</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </tr>
@@ -459,7 +460,7 @@
 
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Search quiz question..."
+                    searchPlaceholder: "🔍 Search objective question  ..."
                 }
             });
 

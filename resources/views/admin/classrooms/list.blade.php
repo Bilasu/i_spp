@@ -5,6 +5,24 @@
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+            /* Adjust this height as needed */
+            padding-top: 6px;
+            /* Adjust padding for better alignment */
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .form-control {
+            height: 36px;
+            padding: 6px 12px;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -12,7 +30,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Class List</h1>
+                        <h1>Classroom List</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -59,7 +77,8 @@
                                     </button>
                                 </div>
 
-                                <table id="classroomTable" class="table table-bordered table-striped">
+                                <table id="classroomTable" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
                                             <th>Class Name</th>
@@ -97,7 +116,7 @@
                                             </tr>
 
                                             <!-- Edit Modal -->
-                                            <div class="modal fade" id="editClassModal{{ $classroom->id }}" tabindex="-1"
+                                            <div class="modal fade" id="editClassModal{{ $classroom->id }}"
                                                 aria-hidden="true">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
@@ -112,16 +131,81 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <!-- Class Name -->
-                                                                <div class="mb-3">
-                                                                    <label>Class Name</label>
-                                                                    <input type="text" name="class_name"
-                                                                        class="form-control"
-                                                                        value="{{ old('class_name', $classroom->class_name) }}"
-                                                                        required>
-                                                                    @error('class_name')
-                                                                        <div class="alert alert-danger">{{ $message }}
-                                                                        </div>
-                                                                    @enderror
+                                                                <div class="modal-body">
+                                                                    @php
+                                                                        $validClassNames = [
+                                                                            '4 Acalaypha',
+                                                                            '4 Alyssium',
+                                                                            '4 Andalas',
+                                                                            '4 Aster',
+                                                                            '4 Amarilis',
+                                                                            '4 Allium',
+                                                                            '4 Azalea',
+                                                                            '5 Acalayapha',
+                                                                            '5 Alyssium',
+                                                                            '5 Andalas',
+                                                                            '5 Aster',
+                                                                            '5 Amarilis',
+                                                                            '5 Allium',
+                                                                            '5 Azalea',
+                                                                        ];
+
+                                                                        $usedClassNames = $usedClassNames ?? [];
+                                                                    @endphp
+
+                                                                    <div class="mb-3">
+                                                                        <label>Class Name</label>
+                                                                        <select name="class_name"
+                                                                            class="form-control class-select" required
+                                                                            style="width: 100%;">
+
+
+                                                                            <option value="" disabled selected>Select
+                                                                                Class</option>
+                                                                            @php
+                                                                                $normalizedUsedClassNames = collect(
+                                                                                    $usedClassNames,
+                                                                                )
+                                                                                    ->map(
+                                                                                        fn($name) => strtolower(
+                                                                                            trim($name),
+                                                                                        ),
+                                                                                    )
+                                                                                    ->toArray();
+                                                                            @endphp
+
+                                                                            @foreach ($validClassNames as $class)
+                                                                                @php
+                                                                                    $normalizedClass = strtolower(
+                                                                                        trim($class),
+                                                                                    );
+                                                                                    $isUsed = in_array(
+                                                                                        $normalizedClass,
+                                                                                        $normalizedUsedClassNames,
+                                                                                    );
+                                                                                    $isEditingThisClass =
+                                                                                        isset($classroom) &&
+                                                                                        strtolower(
+                                                                                            trim(
+                                                                                                $classroom->class_name,
+                                                                                            ),
+                                                                                        ) === $normalizedClass;
+                                                                                @endphp
+
+                                                                                @if (!$isUsed || $isEditingThisClass)
+                                                                                    <option value="{{ $class }}"
+                                                                                        {{ old('class_name', $classroom->class_name ?? '') == $class ? 'selected' : '' }}>
+                                                                                        {{ $class }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
+
+                                                                        </select>
+                                                                        @error('class_name')
+                                                                            <div class="alert alert-danger">{{ $message }}
+                                                                            </div>
+                                                                        @enderror
+                                                                    </div>
                                                                 </div>
 
                                                                 <!-- Status -->
@@ -232,7 +316,7 @@
 
                                         @empty
                                             <tr>
-                                                <td colspan="4">No classrooms found.</td>
+                                                <td colspan="5" class="text-center">No classrooms found.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -252,67 +336,124 @@
                 </div>
 
                 <!-- Add Classroom Modal -->
-                <div class="modal fade" id="addClassroomModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                <div class="modal fade" id="addClassroomModal" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <form action="{{ route('admin.classrooms.store') }}" method="POST">
                                 @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add Class</h5>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                {{-- Class Name --}}
                                 <div class="modal-body">
+                                    @php
+                                        $validClassNames = [
+                                            '4 Acalaypha',
+                                            '4 Alyssium',
+                                            '4 Andalas',
+                                            '4 Aster',
+                                            '4 Amarilis',
+                                            '4 Allium',
+                                            '4 Azalea',
+                                            '5 Acalaypha',
+                                            '5 Alyssium',
+                                            '5 Andalas',
+                                            '5 Aster',
+                                            '5 Amarilis',
+                                            '5 Allium',
+                                            '5 Azalea',
+                                        ];
+
+                                        $usedClassNames = $usedClassNames ?? [];
+                                    @endphp
+
                                     <div class="mb-3">
                                         <label>Class Name</label>
-                                        <input type="text" class="form-control" name="class_name"
-                                            placeholder="4 Alamanda" required>
+                                        <select name="class_name" class="form-control class-select" required
+                                            style="width: 100%;">
+
+
+                                            <option value="" disabled selected>Select Class</option>
+                                            @php
+                                                $normalizedUsedClassNames = collect($usedClassNames)
+                                                    ->map(fn($name) => strtolower(trim($name)))
+                                                    ->toArray();
+                                            @endphp
+
+                                            @foreach ($validClassNames as $class)
+                                                @php
+                                                    $normalizedClass = strtolower(trim($class));
+                                                @endphp
+
+                                                @if (!in_array($normalizedClass, $normalizedUsedClassNames))
+                                                    <option value="{{ $class }}">{{ $class }}</option>
+                                                @endif
+                                            @endforeach
+
+                                        </select>
                                         @error('class_name')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                </div>
 
 
-                                    <!-- Teacher Selection -->
-                                    <div class="mb-3">
-                                        <label>Pilih Guru</label>
-                                        <input type="text" class="form-control mb-2" id="addTeacherSearch"
-                                            placeholder="Cari guru..."
-                                            onkeyup="filterTeachers('addTeacherSearch', 'addTeacherList')">
-                                        <div class="btn-group-toggle d-flex flex-wrap" data-toggle="buttons"
-                                            id="addTeacherList">
-                                            @foreach ($teachers as $teacher)
+                                <!-- Teacher Selection -->
+                                <div class="mb-3">
+                                    <label>Choose Teacher</label>
+                                    <input type="text" class="form-control mb-2" id="addTeacherSearch"
+                                        placeholder="Cari guru..."
+                                        onkeyup="filterTeachers('addTeacherSearch', 'addTeacherList')">
+
+                                    <div class="row" id="addTeacherList">
+                                        @foreach ($teachers as $teacher)
+                                            <!-- Use col-4 (or adjust as needed) for smaller boxes -->
+                                            <div class="col-6 col-md-4 col-sm-6 teacher-item">
+                                                <!-- Adjust the column width here -->
                                                 <label
-                                                    class="btn btn-outline-primary m-1 teacher-btn teacher-item {{ old('teacher_ic') == $teacher->ic ? 'active' : '' }}">
+                                                    class="btn btn-outline-primary m-1 teacher-btn {{ old('teacher_ic') == $teacher->ic ? 'active' : '' }}">
                                                     <input type="radio" name="teacher_ic" value="{{ $teacher->ic }}"
                                                         {{ old('teacher_ic') == $teacher->ic ? 'checked' : '' }}
                                                         class="teacher-checkbox">
                                                     <span>{{ $teacher->name }} ({{ $teacher->ic }})</span>
                                                 </label>
-                                            @endforeach
-                                        </div>
-                                        <small class="text-muted">Only one teacher can be selected.</small>
+                                            </div>
+                                        @endforeach
                                     </div>
+                                    <small class="text-muted">Only one teacher can be selected.</small>
+                                </div>
 
-                                    <!-- Student Selection -->
-                                    <div class="mb-3">
-                                        <label>Pilih Pelajar</label>
-                                        <input type="text" class="form-control mb-2" id="addStudentSearch"
-                                            placeholder="Search students..."
-                                            onkeyup="filterStudents('addStudentSearch', 'addStudentList')">
-                                        <div class="btn-group-toggle d-flex flex-wrap" data-toggle="buttons"
-                                            id="addStudentList">
-                                            @foreach ($studentsWithoutClass as $student)
-                                                <label class="btn btn-outline-success m-1 student-btn student-item">
+                                <!-- Student Selection -->
+                                <div class="mb-3">
+                                    <label>Choose Students</label>
+                                    <input type="text" class="form-control mb-2" id="addStudentSearch"
+                                        placeholder="Search students..."
+                                        onkeyup="filterStudents('addStudentSearch', 'addStudentList')">
+
+                                    <div class="row" id="addStudentList">
+                                        @foreach ($studentsWithoutClass as $student)
+                                            <!-- Use col-6 (or adjust as needed) for smaller boxes -->
+                                            <div class="col-6 col-md-4 col-sm-6 student-item">
+                                                <!-- Adjust the column width here -->
+                                                <label class="btn btn-outline-success m-1 student-btn">
                                                     <input type="checkbox" name="students[]" value="{{ $student->ic }}"
                                                         class="student-checkbox">
                                                     <span>{{ $student->name }} ({{ $student->ic }})</span>
                                                 </label>
-                                            @endforeach
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
+                                </div>
 
 
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success">Save</button>
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Back</button>
-                                    </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -345,6 +486,22 @@
     <script src="dist/js/adminlte.min2167.js?v=3.2.0"></script>
 
     <script src="dist/js/demo.js"></script>
+    <!-- jQuery dulu -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Inisialisasi Select2 -->
+    <script>
+        $(document).ready(function() {
+            $('.class-select').select2({
+                placeholder: "Select Class",
+                allowClear: true,
+                width: '100%' // sangat penting supaya ikut container
+            });
+        });
+    </script>
     <!-- JavaScript for filtering teachers and students  -->
     <script>
         function filterTeachers(inputId, listId) {

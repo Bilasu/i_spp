@@ -12,13 +12,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Senarai Soalan Subjektif</h1>
+                        <h1>List of Subjective Questions</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.quizcategory.read') }}">Back</a></li>
-                            <li class="breadcrumb-item active">Senarai Soalan Subjektif</li>
+                            <li class="breadcrumb-item active">List of Subjective Questions</li>
                         </ol>
                     </div>
                 </div>
@@ -45,25 +45,26 @@
 
 
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped"
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
-                                            <th>Nama Pelajar</th>
-                                            <th>IC Pelajar</th>
-                                            <th>Kelas</th> {{-- NEW --}}
-                                            <th>Betul</th>
-                                            <th>Salah</th>
-                                            <th>Jumlah Soalan</th>
-                                            <th>Tarikh Ambil</th>
+                                            <th>Student Name</th>
+                                            <th>Student IC</th>
+                                            <th>Class</th> {{-- NEW --}}
+                                            <th>Correct </th>
+                                            <th>Wrong</th>
+                                            <th>Total Question</th>
+                                            <th>Taken At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($quizResults as $result)
                                             <tr>
-                                                <td><strong>{{ $result->user->name ?? 'Nama tidak dijumpai' }}</strong></td>
+                                                <td><strong>{{ $result->user->name ?? 'Name not found' }}</strong></td>
                                                 <td>{{ $result->user_ic }}</td>
                                                 <td>
-                                                    {{ $result->user->classrooms->first()->class_name ?? 'Tidak diketahui' }}
+                                                    {{ $result->user->classrooms->first()->class_name ?? 'Not found' }}
                                                 </td>
                                                 <td><span class="badge badge-success">{{ $result->correct }}</span></td>
                                                 <td><span class="badge badge-danger">{{ $result->wrong }}</span></td>
@@ -73,8 +74,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center text-muted">Tiada pelajar yang telah
-                                                    menjawab kuiz ini buat masa ini.</td>
+                                                <td colspan="6" class="text-center text-muted">No students answer this
+                                                    question.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -123,7 +124,7 @@
 
                 language: {
                     search: '',
-                    searchPlaceholder: "🔍 Cari soalan pelajar..."
+                    searchPlaceholder: "🔍 Find student name..."
                 }
             });
 

@@ -18,7 +18,7 @@
             <div class="container-fluid mb-2">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3><i class="fas fa-clipboard-list"></i> Isi Markah Peperiksaan</h3>
+                        <h3><i class="fas fa-clipboard-list"></i> Examination FillMarks</h3>
                     </div>
                     <div class="col-md-6 text-right">
                         <nav aria-label="breadcrumb">
@@ -51,20 +51,20 @@
                         </h5>
 
                         <p>
-                            <strong>Tempoh Isi Markah:</strong>
+                            <strong>Filmark Due Date:</strong>
                             {{ \Carbon\Carbon::parse($exam->start_date)->format('d/m/Y') }}
-                            hingga
+                            until
                             {{ \Carbon\Carbon::parse($exam->end_date)->format('d/m/Y') }}
                         </p>
-                        <div id="datatable-buttons" class="mb-2"></div>
 
                         @if ($canFill)
+                            <!-- Menggunakan $canFill dari controller -->
                             <form action="{{ route('teacher.exams.storemarks', [$exam->id, $classroom->id]) }}"
                                 method="POST">
                                 @csrf
                                 <div class="table-responsive">
 
-                                    <table class="table table-bordered table-hover" id="example1">
+                                    <table class="table table-bordered table-hover">
 
                                         <thead class="thead-dark">
                                             <tr>
@@ -90,12 +90,13 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+
                                     </table>
                                 </div>
 
                                 <div class="text-right mt-3">
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Simpan Markah
+                                        <i class="fas fa-save"></i> Save Marks
                                     </button>
                                 </div>
                             </form>
@@ -111,11 +112,12 @@
         </section>
     </div>
 @endsection
+
 @php
     // Pastikan nama kelas selamat untuk dijadikan nama fail
     $safeClassName = isset($classroom)
         ? preg_replace('/[^A-Za-z0-9_\- ]/', '', $classroom->class_name)
-        : 'Senarai_Pelajar';
+        : 'List of Students';
 @endphp
 {{-- <code>{{ $safeClassName }}</code> --}}
 @section('customJs')

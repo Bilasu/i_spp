@@ -60,14 +60,15 @@
                     <div class="table-responsive mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <table style="background-color: #1e88e5; color: white;" class="table table-bordered">
-                                    <thead class="table-blue-header">
+                                <table class="table table-bordered table-striped" style="table-layout: fixed; width: 100%;">
+                                    <thead class="table-blue-header" style="background-color:#52a8f3; color: white;"
+                                        class="table table-bordered">
                                         <tr>
                                             <th>Title</th>
-                                            <th>Description</th>
+                                            <th style="width: 30%;">Description</th>
                                             <th>Due Date</th>
                                             <th>File</th>
-                                            <th>Submitted Students</th>
+                                            <th style="width: 20%;">Submitted Students</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </tr>
@@ -81,14 +82,15 @@
                                                 </td>
                                                 <td>
                                                     @if ($assignment->file_path)
-                                                        <a href="{{ asset('uploads/' . $assignment->file_path) }}"
+                                                        <a href="{{ asset('storage/uploads/' . $assignment->file_path) }}"
                                                             download>
-                                                            {{ $assignment->file_path }}
+                                                            {{ basename($assignment->file_path) }}
                                                         </a>
                                                     @else
                                                         None
                                                     @endif
                                                 </td>
+
                                                 @php
                                                     $totalStudents = $students->count();
                                                     $submittedCount = $assignment->submissions->count();
@@ -116,7 +118,8 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot style="background-color: #1e88e5; color: white;" class="table table-bordered">
+                                    <tfoot class="table-blue-header" style="background-color: #52a8f3; color: white;"
+                                        class="table table-bordered" style="table-layout: fixed; width: 100%;">
                                         <tr>
                                             <th>Title</th>
                                             <th>Description</th>

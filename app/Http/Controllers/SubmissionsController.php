@@ -34,7 +34,7 @@ class SubmissionsController extends Controller
 
         // Cegah double submission
         if (Submission::where('assignment_id', $assignmentId)->where('student_ic', $student_ic)->exists()) {
-            return redirect()->back()->with('error', 'Anda telah menghantar tugasan ini.');
+            return redirect()->back()->with('error', 'You have already submitted this assignment.');
         }
 
         // Simpan fail
@@ -57,7 +57,7 @@ class SubmissionsController extends Controller
 
         return redirect()
             ->route('student.submission.index', $assignmentId)
-            ->with('success', 'Tugasan berjaya dihantar!');
+            ->with('success', 'Assignment submitted successfully.');
     }
 
     public function update(Request $request, $assignmentId)
@@ -96,8 +96,8 @@ class SubmissionsController extends Controller
         return redirect()
             ->route('student.classroom.index', $assignmentId)
             ->with('success', $late
-                ? 'Tugasan berjaya dikemas kini. <strong>Serahan anda akan dikira sebagai lewat.</strong>'
-                : 'Tugasan berjaya dikemas kini.');
+                ? 'Assignment submitted successfully. <strong>Your submission is stated as being late</strong>'
+                : 'Assignment submitted successfully.');
     }
 
     public function download($file)

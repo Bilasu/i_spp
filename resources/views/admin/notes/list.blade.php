@@ -107,10 +107,10 @@
                                             <tr>
                                                 <!-- File Download Link -->
                                                 <td style="width: auto; white-space: normal; word-wrap: break-word;">
-                                                    <a href="{{ asset('storage/uploads/' . $item->file) }}" target="_blank"
-                                                        download title="Download {{ $item->file }}">
-                                                        {{ $item->file }}
+                                                    <a href="{{ asset('storage/uploads/' . $item->file) }}">
+                                                        Download
                                                     </a>
+
                                                 </td>
 
                                                 <!-- Description -->

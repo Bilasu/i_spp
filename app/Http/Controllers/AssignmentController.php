@@ -57,7 +57,7 @@ class AssignmentController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'due_date' => 'nullable|date|after_or_equal:today',
-                'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:20480',
+                'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:1048576',
             ]);
 
 
@@ -120,7 +120,7 @@ class AssignmentController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'due_date' => 'nullable|date',
-                'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:20480',
+                'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:1048576',
             ]);
 
             try {

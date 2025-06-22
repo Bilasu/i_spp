@@ -27,7 +27,7 @@ class SubmissionsController extends Controller
     public function submit(Request $request, $assignmentId)
     {
         $request->validate([
-            'file' => 'required|file|max:10240', // max 10MB
+            'file' => 'required|file|max:1048576', // max 10MB
             'comment' => 'nullable|string|max:500',
         ]);
 
@@ -76,7 +76,7 @@ class SubmissionsController extends Controller
     public function update(Request $request, $assignmentId)
     {
         $request->validate([
-            'file' => 'nullable|file|max:10240', // Tak wajib kalau cuma nak tukar komen
+            'file' => 'nullable|file|max:1048576', // Tak wajib kalau cuma nak tukar komen
             'comment' => 'nullable|string|max:500',
         ]);
 

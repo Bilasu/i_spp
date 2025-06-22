@@ -106,7 +106,7 @@ class SubmissionsController extends Controller
             Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
 
             // Simpan nama fail dalam database
-            $submission->file = $cleanFilename;
+            $submission->file_path = 'uploads/' . $cleanFilename;
         }
 
         // Update komen dan masa serahan

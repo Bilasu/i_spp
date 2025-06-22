@@ -84,7 +84,7 @@ class AssignmentController extends Controller
                 Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
 
                 // Simpan nama fail dalam database
-                $assignment->file = $cleanFilename;
+                $assignment->file_path = $cleanFilename;
             }
 
             $assignment->save();
@@ -173,7 +173,7 @@ class AssignmentController extends Controller
                     Storage::disk('public')->putFileAs('uploads', $file, $cleanFilename);
 
                     // Simpan nama fail dalam database
-                    $assignment->file = $cleanFilename;
+                    $assignment->file_path = $cleanFilename;
                 }
 
                 // Update assignment data

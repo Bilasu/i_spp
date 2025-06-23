@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <table id="example1" class="table table-bordered table-striped"
-                                    style="table-layout: fixed; width: 100%;">
+                                   >
                                     <thead>
                                         <tr>
 

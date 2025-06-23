@@ -126,11 +126,12 @@
 
                                                 <td><a href="" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#editNotesModal{{ $item->id }}">Edit</a>
-                                                </td>
 
-                                                <td><a href="" class="btn btn-danger" data-toggle="modal"
+                                                    <a href="" class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteNotesModal{{ $item->id }}">Delete</a>
                                                 </td>
+
+                                               
 
 
 

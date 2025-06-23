@@ -100,7 +100,7 @@
                                             <th>Created At</th>
                                             {{-- <th>Download</th> --}}
                                             <th>Edit</th>
-                                            <th>Delete</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -315,7 +315,7 @@
                                             {{-- <th>Download</th> --}}
                                             <th>View</th>
                                             <th>Edit</th>
-                                            <th>Delete</th>
+                                           
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -73,9 +73,9 @@
                                             <tr>
                                                 <td>{{ $student->name }}</td>
                                                 <td>
-                                                    <a href="{{ asset('storage/uploads/' . $submission->file) }}" download
-                                                        title="{{ $item->file }}">
-                                                        {{ $item->file }}
+                                                    <a href="{{ asset('storage/' . $submission->file_path) }}" download
+                                                        title="{{ basename($submission->file_path) }}">
+                                                        {{ basename($submission->file_path) }}
                                                     </a>
                                                 </td>
                                                 <td

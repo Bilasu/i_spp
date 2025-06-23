@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <table id="example1" class="table table-bordered table-striped"
-                                    style="table-layout: auto; width: 100%;">
+                                    style="table-layout: fixed; width: 100%;">
                                     <thead>
                                         <tr>
 
@@ -99,14 +99,14 @@
                                             <th>Note Type</th>
                                             <th>Created At</th>
                                             {{-- <th>Download</th> --}}
-                                            <th>Action</th>
-
+                                            <th>Edit</th>
+                                            <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($notes as $item)
                                             <tr>
-                                                <!-- File Download Link -->
+
                                                 <td
                                                     style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                     <a href="{{ asset('storage/uploads/' . $item->file) }}" download
@@ -115,23 +115,24 @@
                                                     </a>
                                                 </td>
 
-                                                <!-- Description -->
                                                 <td>{{ $item->desc }}</td>
-
-                                                <!-- Note Type -->
+                                                {{-- <td>{{ $item->file }}</td> --}}
                                                 <td>{{ $item->Notetypes->name }}</td>
-
-                                                <!-- Created At -->
                                                 <td>{{ $item->created_at }}</td>
 
-                                                <!-- Edit Button -->
-                                                <td>
-                                                    <a href="" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#editNotesModal{{ $item->id }}">Edit</a>
+                                                {{-- <td><a href="{{ route('admin.notes.download', $item->file) }}"
+                                                        class="btn btn-primary">Download</a></td> --}}
 
-                                                    |<a href="" class="btn btn-danger" data-toggle="modal"
+
+                                                <td><a href="" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#editNotesModal{{ $item->id }}">Edit</a>
+                                                </td>
+
+                                                <td><a href="" class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteNotesModal{{ $item->id }}">Delete</a>
                                                 </td>
+
+
 
 
                                             </tr>
@@ -287,7 +288,7 @@
                                                                 <p class="text-center">Are you sure you want to delete this
                                                                     note type?</p>
                                                                 <p class="text-center">
-                                                                    <strong>{{ $item->file }}</strong>
+                                                                    <strong>{{ $item->name }}</strong>
                                                                 </p>
                                                             </div>
 
